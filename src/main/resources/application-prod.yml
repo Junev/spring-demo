@@ -1,0 +1,23 @@
+server:
+  port: 80
+  servlet:
+    context-path: /chapter3
+  tomcat:
+    uri-encoding: utf-8
+mybook:
+  name: 罗贯中
+  author: 罗贯中
+  price: 300
+my:
+  users:
+    - name: 江南一点雨
+      address: China
+      favorites:
+        - 足球
+        - 徒步
+        - Coding
+    - name: sang
+      address: GZ
+      favorites:
+        - 阅读
+        - 吉他

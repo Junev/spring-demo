@@ -1,0 +1,6 @@
+server:
+  port: 8080
+mybook:
+  name: 罗贯中
+  author: 罗贯中
+  price: 300
