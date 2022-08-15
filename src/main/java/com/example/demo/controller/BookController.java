@@ -14,7 +14,6 @@ public class BookController {
 
     /**
      * MappingJacksonToHttpMessageConverter
-     *
      */
     @GetMapping("/book")
     public Book book() {
@@ -23,6 +22,7 @@ public class BookController {
         newBook.setAuthor("罗贯中");
         newBook.setPrice(129.99);
         newBook.setPublicationDate(new Date());
+        Integer a = 1 / 0;
         return newBook;
     }
 }
