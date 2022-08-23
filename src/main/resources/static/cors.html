@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS</title>
+</head>
+<body>
+<script>
+    fetch('http://localhost:8080/book', {
+        method: 'post',
+        body: JSON.stringify({foo: 123}),
+        headers: {"Content-Type": 'application/json'}
+    }).then(res => res.json()).then(console.log)
+</script>
+</body>
+</html>
