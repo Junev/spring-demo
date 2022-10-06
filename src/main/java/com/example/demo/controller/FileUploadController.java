@@ -35,7 +35,9 @@ public class FileUploadController {
 
         try {
             uploadFile.transferTo(new File(folder, newFileName));
-            String filePath = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/uploadFile/" + format + "/" + newFileName;
+            String filePath =
+                    req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() +
+                            "/uploadFile/" + format + "/" + newFileName;
             return filePath;
         } catch (IOException e) {
             e.printStackTrace();

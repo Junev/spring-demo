@@ -1,9 +1,22 @@
 server:
-  port: 80
+  port: 9090
+  ssl:
+    key-store: classpath:tomact.keystore
+    key-store-password: 123456
+    key-store-type: JKS
+    key-alias: tomact
+    enabled: true
   servlet:
     context-path: /chapter3
   tomcat:
     uri-encoding: utf-8
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/vhr?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
 mybook:
   name: 罗贯中
   author: 罗贯中
