@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Hr;
-import com.example.demo.mapper.HrMapper;
+import com.example.demo.mapper.HrMapperOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class HrService {
     @Autowired
-    HrMapper hrMapper;
+    HrMapperOrigin hrMapper;
 
     public Hr getHrById(Integer id) {
         return hrMapper.getHrById(id);

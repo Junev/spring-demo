@@ -1,7 +1,5 @@
 package com.example.demo;
 
-//import org.mybatis.spring.annotation.MapperScan;
-
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @ServletComponentScan
 @MapperScan("com.example.demo.mapper")
+@MapperScan("com.example.repository.mapper")
 public class DemoApplication {
 
     public static void main(String[] args) {

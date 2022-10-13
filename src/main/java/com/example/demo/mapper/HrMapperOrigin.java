@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface HrMapper {
+public interface HrMapperOrigin {
     Hr getHrById(Integer id);
 
     List<Hr> listHrs();
