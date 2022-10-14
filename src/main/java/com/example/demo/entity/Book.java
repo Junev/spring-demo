@@ -5,11 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Component
 @ConfigurationProperties(prefix = "mybook")
-public class Book {
+public class Book implements Serializable {
     private String name;
     private String author;
 
