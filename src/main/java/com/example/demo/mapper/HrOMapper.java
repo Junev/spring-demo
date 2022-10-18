@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface HrMapperOrigin {
+public interface HrOMapper {
     Hr getHrById(Integer id);
 
     List<Hr> listHrs();
@@ -14,8 +14,8 @@ public interface HrMapperOrigin {
     Integer addHr(Hr hr);
 
     Integer addHrSelective(Hr hr);
-//
-//    int updateHrById(Hr hr);
-//
-//    int deleteHrById(Integer id);
+
+    Integer updateHrById(Hr hr);
+
+    Integer deleteHrById(Integer id);
 }

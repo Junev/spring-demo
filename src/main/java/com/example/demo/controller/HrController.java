@@ -40,4 +40,17 @@ public class HrController {
         hr.setPhone("321321");
         return hrService.addHrSelective(hr);
     }
+
+    @PostMapping("updateHrById")
+    public Integer updateHrById() {
+        Hr hr = new Hr();
+        hr.setId(13);
+        hr.setName("hello foo");
+        return hrService.updateHrById(hr);
+    }
+
+    @PostMapping("deleteHrById")
+    public Integer deleteHrById() {
+        return hrService.deleteHrById(13);
+    }
 }
