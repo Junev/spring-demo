@@ -31,3 +31,7 @@ mybook:
   name: 罗贯中
   author: 罗贯中
   price: 300
+my:
+  users:
+    - name: 江南一点雨
+      address: China

@@ -22,13 +22,12 @@ public class HrService {
         return hrMapper.getHrById(id);
     }
 
-    public List<Hr> listHrs() {
+    public List<Hr> listHrs()
+    {
         return hrMapper.listHrs();
     }
 
-    public Integer addHr(Hr hr) {
-        return hrMapper.addHr(hr);
-    }
+    public Integer addHr(Hr hr) { return hrMapper.addHr(hr); }
 
     public Integer addHrSelective(Hr hr) {
         return hrMapper.addHrSelective(hr);
