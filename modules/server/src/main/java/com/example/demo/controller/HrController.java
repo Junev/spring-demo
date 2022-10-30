@@ -30,6 +30,7 @@ public class HrController {
         Hr hr = new Hr();
         hr.setName("foo");
         hr.setPhone("123123");
+        hr.setPassword("123");
         return hrService.addHr(hr);
     }
 
@@ -43,9 +44,8 @@ public class HrController {
 
     @PostMapping("updateHrById")
     public Integer updateHrById() {
-        Hr hr = new Hr();
-        hr.setId(13);
-        hr.setName("hello foo");
+        Hr hr = hrService.getHrById(3);
+        hr.setPassword("123");
         return hrService.updateHrById(hr);
     }
 

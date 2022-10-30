@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class Hr implements Serializable {
+public class Hr implements Serializable{
     private Integer id;
 
     private String name;
@@ -25,4 +25,5 @@ public class Hr implements Serializable {
     private String userface;
 
     private String remark;
+
 }

@@ -17,11 +17,29 @@
     <sql id="Base_Column_List">
       id, name, phone, telephone, address, enabled, username, password, userface, remark
     </sql>
-    <select id="getHrById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="getHrById" parameterType="java.lang.Integer"
+            resultType="com.example.demo.entity.Hr">
         select
         *
         from hr
         where id = #{id,jdbcType=INTEGER};
+    </select>
+    <select id="loadHrByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        *
+        from hr
+        where username = #{name,jdbcType=INTEGER}
+    </select>
+    <select id="getUserRolesByUid" parameterType="java.lang.Integer"
+            resultType="com.example.demo.entity.Role">
+        select
+        *
+        from role
+        where id in (
+          select rid
+          from hr_role
+          where hrid = #{id,jdbcType=INTEGER}
+        )
     </select>
     <select id="listHrs" resultMap="BaseResultMap">
         select
