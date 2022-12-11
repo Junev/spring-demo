@@ -24,7 +24,8 @@
         from hr
         where id = #{id,jdbcType=INTEGER};
     </select>
-    <select id="loadHrByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="loadHrByUserName" parameterType="java.lang.String"
+            resultType="com.example.demo.security.HrDetails">
         select
         *
         from hr

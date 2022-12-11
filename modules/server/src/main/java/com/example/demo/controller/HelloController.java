@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,5 +14,11 @@ public class HelloController {
     @GetMapping("/user/hello")
     public String user() {
         return "Hello user";
+    }
+
+    @GetMapping("/getCurrentUser")
+    public Object getCurrentUser(Authentication authentication)
+    {
+        return authentication.getPrincipal();
     }
 }
