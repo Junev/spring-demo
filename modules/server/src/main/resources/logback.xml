@@ -23,5 +23,10 @@
 
     <root level="info">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
     </root>
+
+    <logger name="com.example.demo.mapper">
+        <level value="debug"/>
+    </logger>
 </configuration>

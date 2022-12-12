@@ -49,9 +49,9 @@ public class DemoApplication {
                 "Application demo is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
                 "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
-                "Swagger-ui: \thttp://" + ip + ":" + port + path + "/swagger-ui/index.html\n\t" +
+                "Swagger-ui: \thttp://" + ip + ":" + port + path + "/swagger-ui/index.html\n" +
 //                "Doc文档: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
-                "----------------------------------------------------------");
+                "----------------------------------------------------------\n");
     }
 
     @Autowired
