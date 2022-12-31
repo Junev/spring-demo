@@ -34,7 +34,7 @@
         <!--</sqlMapGenerator>-->
 
         <!--&lt;!&ndash; targetPackage：mapper接口生成的位置 &ndash;&gt;-->
-        <!--<javaClientGenerator targetPackage="com.data.flag.mapper" targetProject="src/main/java" type="XMLMAPPER">-->
+        <!--<javaClientGenerator targetPackage="com.data.flag.xml" targetProject="src/main/java" type="XMLMAPPER">-->
         <!--&lt;!&ndash; enableSubPackages:是否让schema作为包的后缀 &ndash;&gt;-->
         <!--<property name="enableSubPackages" value="false" />-->
         <!--</javaClientGenerator>-->

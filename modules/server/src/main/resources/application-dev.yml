@@ -24,8 +24,6 @@ spring:
 #        max-idle: 8
 #        max-wait: -1ms
 #        min-idle: 0
-mybatis:
-  mapper-locations: classpath*:com/example/demo/**/xml/*Mapper.xml
 
 mybook:
   name: 罗贯中
