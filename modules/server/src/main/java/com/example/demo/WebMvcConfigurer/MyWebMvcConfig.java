@@ -22,6 +22,12 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(7200)
                 .allowedOrigins("http://127.0.0.1:8080");
+
+        registry.addMapping("/mdb")
+                .allowedHeaders("*")
+                .allowedMethods("*")
+                .maxAge(7200)
+                .allowedOrigins("*");
     }
 
     @Override

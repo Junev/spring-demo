@@ -13,6 +13,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.HashMap;
 
 @Configuration
 @EnableAuthorizationServer
@@ -35,7 +38,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 1. 通过/oauth/token接口 获取token
                 .withClient("password")
                 .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(1800)
+                .accessTokenValiditySeconds(24 * 60 * 60)
                 .resourceIds("rid")
                 .scopes("all")
                 .secret(passwordEncoder.encode("123"))
@@ -58,6 +61,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.tokenStore(new RedisTokenStore(redisConnectionFactory))
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService);
+
+        // /oauth/token cors
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setMaxAge(7200L);
+        HashMap<String, CorsConfiguration> corsConfigurationMap = new HashMap<>();
+        corsConfigurationMap.put("/oauth/token", corsConfiguration);
+        endpoints.getFrameworkEndpointHandlerMapping().setCorsConfigurations(corsConfigurationMap);
     }
 
     @Override

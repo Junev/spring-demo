@@ -24,6 +24,9 @@ spring:
 #        max-idle: 8
 #        max-wait: -1ms
 #        min-idle: 0
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
 
 mybook:
   name: 罗贯中

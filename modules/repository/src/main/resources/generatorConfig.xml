@@ -40,5 +40,12 @@
         <!--</javaClientGenerator>-->
 
         <table tableName="HR"/>
+        <table tableName="ems_equipmentclass"/>
+        <table tableName="ems_equipmentclassproperty"/>
+        <table tableName="ems_equipmentelement"/>
+        <table tableName="ems_equipmentelementclass"/>
+        <table tableName="ems_equipmentgroup"/>
+        <table tableName="ems_equipmentproperty"/>
+        <table tableName="ems_equipmentpropertygroup"/>
     </context>
 </generatorConfiguration>

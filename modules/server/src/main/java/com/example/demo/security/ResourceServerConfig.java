@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -16,9 +17,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+
         //所有的访问都需要认证访问
         http.authorizeRequests().anyRequest().authenticated();
+
         //唯独user 可以访问 放行我们的资源
-        http.requestMatchers().antMatchers("/admin/**","/user/**");
+        http.requestMatchers().antMatchers("/admin/**", "/user/**", "/api", "/mdb");
     }
 }
