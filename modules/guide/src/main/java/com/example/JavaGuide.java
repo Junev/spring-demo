@@ -1,10 +1,13 @@
 package com.example;
 
+import com.example.annotation.Test;
+import com.example.annotation.TestAnnotation;
 import com.example.reflect.Animal;
 import com.example.reflect.Bird;
 import com.example.reflect.DebugInvocationHandler;
 import com.example.reflect.TargetObject;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,12 +17,37 @@ public class JavaGuide {
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException,
             InstantiationException, NoSuchMethodException, InvocationTargetException,
             NoSuchFieldException {
-        JavaGuide jg = new JavaGuide();
-        jg.reflect();
+        JavaGuide.reflect();
+
+        JavaGuide.reflectAnnotations();
 
     }
 
-    private void reflect() throws ClassNotFoundException, InstantiationException,
+    private static void reflectAnnotations() {
+        boolean annotationPresent = Test.class.isAnnotationPresent(TestAnnotation.class);
+        if (annotationPresent) {
+            TestAnnotation annotations = Test.class.getAnnotation(TestAnnotation.class);
+            System.out.println("annotations.msg = " + annotations.msg());
+        }
+
+        try {
+            Method testMethod = Test.class.getDeclaredMethod("testMethod");
+            if (testMethod != null) {
+                Annotation[] annotations = testMethod.getAnnotations();
+                for (Annotation annotation : annotations) {
+                    System.out.println(annotation.annotationType().getName());
+                    if (annotation instanceof TestAnnotation) {
+                        System.out.println("((TestAnnotation) annotation).msg() = " + ((TestAnnotation) annotation)
+                                .msg());
+                    }
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void reflect() throws ClassNotFoundException, InstantiationException,
             IllegalAccessException,
             NoSuchMethodException, InvocationTargetException, NoSuchFieldException {
         /**
