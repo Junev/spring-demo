@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.annotation.Test;
 import com.example.annotation.TestAnnotation;
+import com.example.collection.ExampleListToMap;
 import com.example.reflect.Animal;
 import com.example.reflect.Bird;
 import com.example.reflect.DebugInvocationHandler;
@@ -17,6 +18,8 @@ public class JavaGuide {
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException,
             InstantiationException, NoSuchMethodException, InvocationTargetException,
             NoSuchFieldException {
+        ExampleListToMap.listToMap();
+
         JavaGuide.reflect();
 
         JavaGuide.reflectAnnotations();
