@@ -21,6 +21,11 @@
             <artifactId>mybatis</artifactId>
             <version>3.5.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>21.8.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -30,16 +35,21 @@
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.4.1</version>
                 <dependencies>
+                    <!--<dependency>-->
+                    <!--<groupId>mysql</groupId>-->
+                    <!--<artifactId>mysql-connector-java</artifactId>-->
+                    <!--<version>8.0.22</version>-->
+                    <!--<scope>runtime</scope>-->
+                    <!--</dependency>-->
                     <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>8.0.22</version>
-                        <scope>runtime</scope>
+                        <groupId>com.oracle.database.jdbc</groupId>
+                        <artifactId>ojdbc8</artifactId>
+                        <version>21.8.0.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
                     <configurationFile>
-                        ${basedir}/src/main/resources/generatorConfig.xml
+                        src/main/resources/generatorConfig.xml
                     </configurationFile>
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>
