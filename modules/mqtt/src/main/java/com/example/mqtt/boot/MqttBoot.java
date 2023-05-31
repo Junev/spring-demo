@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Boot {
+public class MqttBoot {
     private static MqttClient mqttClient;
     private static MqttConnectOptions mqttConnectOptions;
     private static Handler handler;
@@ -14,8 +14,8 @@ public class Boot {
     public static void run() {
         try {
             System.out.println("handler");
-            System.out.println(Boot.handler);
-            mqttClient.setCallback(Boot.handler);
+            System.out.println(MqttBoot.handler);
+            mqttClient.setCallback(MqttBoot.handler);
             System.out.println("mqttConnectOptions: ");
             System.out.println(mqttConnectOptions);
             mqttClient.connect(mqttConnectOptions);
@@ -31,7 +31,7 @@ public class Boot {
 
     @Autowired
     public void setMqttClient(MqttClient mqttClient) {
-        Boot.mqttClient = mqttClient;
+        MqttBoot.mqttClient = mqttClient;
     }
 
     public static MqttConnectOptions getMqttConnectOptions() {
@@ -40,7 +40,7 @@ public class Boot {
 
     @Autowired
     public void setMqttConnectOptions(MqttConnectOptions mqttConnectOptions) {
-        Boot.mqttConnectOptions = mqttConnectOptions;
+        MqttBoot.mqttConnectOptions = mqttConnectOptions;
     }
 
     public static Handler getHandler() {
@@ -49,6 +49,6 @@ public class Boot {
 
     @Autowired
     public void setHandler(Handler handler) {
-        Boot.handler = handler;
+        MqttBoot.handler = handler;
     }
 }
