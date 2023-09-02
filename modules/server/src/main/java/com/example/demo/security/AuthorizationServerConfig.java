@@ -13,9 +13,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
-import org.springframework.web.cors.CorsConfiguration;
-
-import java.util.HashMap;
 
 @Configuration
 @EnableAuthorizationServer
@@ -45,7 +42,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .and()
                 // 1. 通过/login登录，获取session id
                 // 2. 请求授权/oauth/authorize?response_type=code&state=&client_id=code&scope=all
-                // &redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback
+                // &redirect_uri=http%3A%2F%2Flocalhost%3A9090%2Fcallback
                 // 3. 拿code交换token /oauth/token
                 .withClient("code")
                 .authorizedGrantTypes("authorization_code")
@@ -53,24 +50,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .resourceIds("rid")
                 .scopes("all")
                 .secret(passwordEncoder.encode("123"))
-                .redirectUris("http://localhost:8080/callback");
+                .redirectUris("http://localhost:9090/callback");
     }
 
-    @Override
+    //    @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(new RedisTokenStore(redisConnectionFactory))
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService);
-
-        // /oauth/token cors
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setMaxAge(7200L);
-        HashMap<String, CorsConfiguration> corsConfigurationMap = new HashMap<>();
-        corsConfigurationMap.put("/oauth/token", corsConfiguration);
-        endpoints.getFrameworkEndpointHandlerMapping().setCorsConfigurations(corsConfigurationMap);
     }
 
     @Override

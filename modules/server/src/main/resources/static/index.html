@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<script>
+    location.href = '/oauth/authorize?response_type=code&state=&client_id=code&scope=all\n' +
+        '&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2Fcallback';
+    const pathname = location.pathname;
+    console.log(pathname)
+</script>
+</body>
+</html>

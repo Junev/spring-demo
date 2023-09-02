@@ -6,10 +6,13 @@
 </head>
 <body>
 <script>
-    fetch('http://localhost:8080/book', {
+    fetch('http://localhost:9090/book', {
         method: 'post',
         body: JSON.stringify({foo: 123}),
-        headers: {"Content-Type": 'application/json'}
+        headers: {
+            "Content-Type": 'application/json',
+            "Authorization": "Bearer " + "fdc457d0-5ed7-4bf5-8838-5bb35662d60f"
+        }
     }).then(res => res.json()).then(console.log)
 </script>
 </body>
