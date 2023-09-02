@@ -39,20 +39,20 @@ public class MqttTriggerService {
 
             trigger.setTriggerName("20102烟包" + i);
 
-            String weightPoint = "u20102bmb" + String.format("%03d", i);
+            String iStr = String.format("%03d", i);
+            String weightPoint = "u20102bmb" + iStr;
             String serialNumber = "u20102pt0001";
-
 
             String condition =
                     weightPoint + ">0" + " & " + weightPoint + " != " + "*" + weightPoint +
-                            ".oldvalue" + " & " + serialNumber + " != null";
+                            ".oldvalue" + " & " + serialNumber + "!=null";
             trigger.setTriggerCondition(condition);
 
             String body = "{\"TASKID\":*[u20102pt0001]*,\"BOMBATCHID\":*[u20102pt0002]*," +
-                    "\"BOMID\":" + i + ",\"QTY\":*[u20102bmb" + String.format("%03d", i) + "]*," +
-                    "\"TOTALQTY\":*[u20102pt0082]*," + "\"SCANCODE\":*[u20102bms" + String.format(
-                    "%03d", i) +
-                    "]*" + "}";
+                    "\"BOMID\":" + i + ",\"QTY\":*[u20102bmb" + iStr + "]*," +
+                    "\"TOTALQTY\":*[u20102pt0082]*"
+                    + ",\"SCANCODE\":*[u20102bms" + iStr + "]*"
+                    + "}";
             trigger.setTriggerMqttbody(body);
 
             triggerMapper.insert(trigger);
