@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MyMqttClient {
     private static MqttConfig mqttConfig;
-    private static final String[] topic = {"silo/in/1", "silo/in/2", "silo/out/1", "silo/out/2"};
     private static final Integer qos = 0;
 
     public static MqttConfig getMqttConfig() {
@@ -32,16 +31,12 @@ public class MyMqttClient {
     }
 
     @Bean
-    MqttConnectOptions mqttConnectOptions (){
+    MqttConnectOptions mqttConnectOptions() {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setUserName(mqttConfig.getUsername());
         options.setPassword(mqttConfig.getPassword().toCharArray());
         options.setAutomaticReconnect(true);
         return options;
-    }
-
-    static String[] getTopic() {
-        return topic;
     }
 
     public static Integer getQos() {

@@ -11,6 +11,6 @@ public class AddTriggerCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        triggerService.run();
+//        triggerService.run();
     }
 }

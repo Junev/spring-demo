@@ -6,20 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MqttBoot {
+public class SiloMqttBoot {
     private static MqttClient mqttClient;
     private static MqttConnectOptions mqttConnectOptions;
-    private static Handler handler;
+    private static SiloMqttHandler handler;
 
     public static void run() {
         try {
-            System.out.println("handler");
-            System.out.println(MqttBoot.handler);
-            mqttClient.setCallback(MqttBoot.handler);
-            System.out.println("mqttConnectOptions: ");
-            System.out.println(mqttConnectOptions);
+            System.out.println("handler" + SiloMqttBoot.handler);
+            mqttClient.setCallback(SiloMqttBoot.handler);
+            System.out.println("mqttConnectOptions: " + mqttConnectOptions.getUserName());
             mqttClient.connect(mqttConnectOptions);
-            mqttClient.subscribe(MyMqttClient.getTopic());
+//            mqttClient.subscribe(MyMqttClient.getTopic());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,7 +29,7 @@ public class MqttBoot {
 
     @Autowired
     public void setMqttClient(MqttClient mqttClient) {
-        MqttBoot.mqttClient = mqttClient;
+        SiloMqttBoot.mqttClient = mqttClient;
     }
 
     public static MqttConnectOptions getMqttConnectOptions() {
@@ -40,15 +38,15 @@ public class MqttBoot {
 
     @Autowired
     public void setMqttConnectOptions(MqttConnectOptions mqttConnectOptions) {
-        MqttBoot.mqttConnectOptions = mqttConnectOptions;
+        SiloMqttBoot.mqttConnectOptions = mqttConnectOptions;
     }
 
-    public static Handler getHandler() {
+    public static SiloMqttHandler getHandler() {
         return handler;
     }
 
     @Autowired
-    public void setHandler(Handler handler) {
-        MqttBoot.handler = handler;
+    public void setHandler(SiloMqttHandler handler) {
+        SiloMqttBoot.handler = handler;
     }
 }

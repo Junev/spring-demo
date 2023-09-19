@@ -1,6 +1,6 @@
 package com.example.mqtt.entity;
 
-public class Silo {
+public class MqttMessage {
 
     /**
      * msgstr : {"SILOID":"102304","TASKID":"221229030102","SILOTASKID":"","INOROUTBATCHID":"",

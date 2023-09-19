@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 用于配置烟包BOM触发器，在PDS_MQTTTRIGGER表里插入新记录。
+ */
 @Service
 @Transactional
 public class MqttTriggerService {

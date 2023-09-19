@@ -1,5 +1,6 @@
 package com.example.mqtt;
 
+import com.example.mqtt.boot.SiloMqttBoot;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,5 +16,6 @@ public class MqttApplication {
 
     public static void main(String[] args) {
         context = SpringApplication.run(MqttApplication.class, args);
+        SiloMqttBoot.run();
     }
 }

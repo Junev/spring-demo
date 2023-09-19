@@ -1,15 +1,20 @@
 package com.example.mqtt.boot;
 
-import com.example.mqtt.entity.Silo;
+import com.example.mqtt.entity.MqttMessage;
 import com.example.mqtt.entity.SiloMessageRecord;
 import com.example.mqtt.mapper.SiloMessageMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Handler implements MqttCallbackExtended {
+public class SiloMqttHandler implements MqttCallbackExtended {
+    private final String[] topic = {"silo/in/1", "silo/in/2", "silo/out/1", "silo/out/2"};
+
     @Autowired
     MqttClient mqttClient;
 
@@ -20,16 +25,16 @@ public class Handler implements MqttCallbackExtended {
         System.out.println("connectionLost: " + cause.getMessage());
     }
 
-    public void messageArrived(String topic, MqttMessage message) {
+    public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage message) {
         System.out.println("topic: " + topic);
         System.out.println("Qos: " + message.getQos());
 //        System.out.println("message content: " + new String(message.getPayload()));
         ObjectMapper objectMapper = new ObjectMapper();
-        Silo silo = null;
+        MqttMessage mqttMessage = null;
         try {
-            silo = objectMapper.readValue(message.getPayload(), Silo.class);
-            if (silo != null) {
-                SiloMessageRecord message1 = objectMapper.readValue(silo.getMsgstr(),
+            mqttMessage = objectMapper.readValue(message.getPayload(), MqttMessage.class);
+            if (mqttMessage != null) {
+                SiloMessageRecord message1 = objectMapper.readValue(mqttMessage.getMsgstr(),
                         SiloMessageRecord.class);
                 message1.setTopic(topic);
                 System.out.println(message1.getCreatedAt());
@@ -52,7 +57,7 @@ public class Handler implements MqttCallbackExtended {
     public void connectComplete(boolean b, String s) {
         System.out.println("connectComplete: " + b + " " + s);
         try {
-            mqttClient.subscribe(MyMqttClient.getTopic());
+            mqttClient.subscribe(this.topic);
         } catch (MqttException e) {
             e.printStackTrace();
         }
