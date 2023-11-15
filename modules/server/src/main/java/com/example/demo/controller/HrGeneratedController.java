@@ -18,6 +18,7 @@ public class HrGeneratedController {
     public Long CountHr() {
         HrExample hrExample = new HrExample();
         hrExample.createCriteria();
+        hrExample.setOrderByClause("");
 
         return hrMapper.countByExample(hrExample);
     }

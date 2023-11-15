@@ -3,10 +3,15 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <context id="simple" targetRuntime="MyBatis3">
-        <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
-                        connectionURL="jdbc:oracle:thin:@192.168.78.135:1521/MDB"
-                        userId="dbzs"
-                        password="Ksecq1w2e3r4t5"
+        <!--<jdbcConnection driverClass="oracle.jdbc.OracleDriver"-->
+        <!--connectionURL="jdbc:oracle:thin:@192.168.78.135:1521/MDB"-->
+        <!--userId="dbzs"-->
+        <!--password="Ksecq1w2e3r4t5"-->
+        <!--/>-->
+        <jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+                        connectionURL="jdbc:sqlserver://192.168.40.17:1433;database=HZZS_DB;Encrypt=False;"
+                        userId="sa"
+                        password="q1w2e3r4t5..."
         />
 
         <javaModelGenerator targetPackage="com.example.repository.model"
@@ -39,6 +44,7 @@
         <!--<property name="enableSubPackages" value="false" />-->
         <!--</javaClientGenerator>-->
 
-        <table tableName="PDS_MQTTTOPIC_TRIGGER"/>
+        <table tableName="PDS_EQUIPPROPERTY"/>
+        <table tableName="PRD_TASK_CP"/>
     </context>
 </generatorConfiguration>
