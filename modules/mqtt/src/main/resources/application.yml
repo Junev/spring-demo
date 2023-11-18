@@ -33,3 +33,5 @@ opcua:
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
+ksecapi:
+  url: http://192.168.40.20:81
