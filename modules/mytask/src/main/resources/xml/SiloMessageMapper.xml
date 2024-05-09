@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mytask.mapper.SiloMessageMapper">
+    <!--<resultMap id="BaseResultMap" type="">-->
+    <!--<id column="id" property="id" jdbcType="INTEGER"/>-->
+
+    <!--</resultMap>-->
+    <insert id="addSiloMessage" parameterType="com.example.mytask.entity.SiloMessageRecord">
+      insert into SILO_MESSAGE
+      (topic, createdAt, SILOTASKID,
+      INOROUTBATCHID, INOROUTMATID,
+      INOROUTAMOUNT, REMAINAMOUNT,
+      SILOSTORETIMELONG, ISY,
+      ISM, ISD,
+      ISH, SILOID,
+      TASKID, IEY,
+      IEM, IED,
+      IEH, IEN,
+      IES, OSY,
+      OSM, OSD,
+      OSH, OSN,
+      OSS, OEY,
+      OEM, OED,
+      ISN, OEN,
+      OES, SCALEWEIGHT,
+      SCALEPARAID, ISUSETIMENOW,
+      OEH, ISS
+      )
+      values
+      (#{topic, jdbcType=NVARCHAR}, #{createdAt, jdbcType=DATE}, #{SILOTASKID, jdbcType=NVARCHAR},
+      #{INOROUTBATCHID, jdbcType=NVARCHAR}, #{INOROUTMATID, jdbcType=NVARCHAR},
+      #{INOROUTAMOUNT,jdbcType=NVARCHAR}, #{REMAINAMOUNT, jdbcType=NVARCHAR},
+      #{SILOSTORETIMELONG, jdbcType=NVARCHAR}, #{ISY, jdbcType=NVARCHAR},
+      #{ISM, jdbcType=NVARCHAR}, #{ISD, jdbcType=NVARCHAR},
+      #{ISH, jdbcType=NVARCHAR}, #{SILOID, jdbcType=NVARCHAR},
+      #{TASKID, jdbcType=NVARCHAR}, #{IEY, jdbcType=NVARCHAR},
+      #{IEM, jdbcType=NVARCHAR}, #{IED, jdbcType=NVARCHAR},
+      #{IEH, jdbcType=NVARCHAR}, #{IEN, jdbcType=NVARCHAR},
+      #{IES, jdbcType=NVARCHAR}, #{OSY, jdbcType=NVARCHAR},
+      #{OSM, jdbcType=NVARCHAR}, #{OSD, jdbcType=NVARCHAR},
+      #{OSH, jdbcType=NVARCHAR}, #{OSN, jdbcType=NVARCHAR},
+      #{OSS, jdbcType=NVARCHAR}, #{OEY, jdbcType=NVARCHAR},
+      #{OEM, jdbcType=NVARCHAR}, #{OED, jdbcType=NVARCHAR},
+      #{ISN, jdbcType=NVARCHAR}, #{OEN, jdbcType=NVARCHAR},
+      #{OES, jdbcType=NVARCHAR}, #{SCALEWEIGHT, jdbcType=NVARCHAR},
+      #{SCALEPARAID, jdbcType=NVARCHAR}, #{ISUSETIMENOW, jdbcType=NVARCHAR},
+      #{OEH, jdbcType=NVARCHAR}, #{ISS, jdbcType=NVARCHAR}
+      )
+  </insert>
+</mapper>

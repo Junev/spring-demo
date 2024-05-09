@@ -18,7 +18,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-
+/**
+ * @see <a href="https://blog.csdn.net/weixin_40379712/article/details/130056716">废弃的</a>
+ * @see <a href="https://blog.csdn.net/qq_35067322/article/details/115878528">WebSecurity</a>
+ */
 @Configuration
 @EnableWebSecurity
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
