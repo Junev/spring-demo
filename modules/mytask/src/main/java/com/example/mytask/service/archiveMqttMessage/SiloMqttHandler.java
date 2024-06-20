@@ -1,4 +1,4 @@
-package com.example.mytask.mqtt;
+package com.example.mytask.service.archiveMqttMessage;
 
 import com.example.mytask.entity.MqttMessage;
 import com.example.mytask.entity.SiloMessageRecord;

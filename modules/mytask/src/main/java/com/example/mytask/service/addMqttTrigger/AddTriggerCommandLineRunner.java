@@ -1,4 +1,4 @@
-package com.example.mytask.mqtt;
+package com.example.mytask.service.addMqttTrigger;
 
 import org.springframework.boot.CommandLineRunner;
 

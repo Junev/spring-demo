@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mytask.mapper.EmsRunTimeStatsMyMapper">
+    <resultMap id="RunTimeStatResultMap"
+               type="com.example.mytask.entity.EmsRunTimeStats">
+        <result column="EQUIPELEMENTID" property="EQUIPELEMENTID" jdbcType="NVARCHAR"/>
+        <result column="EQUIPPROPERTYID" property="EQUIPPROPERTYID" jdbcType="NVARCHAR"/>
+        <result column="EMSPROPERTYID" property="EMSPROPERTYID" jdbcType="NVARCHAR"/>
+        <result column="RECORDDATE" property="RECORDDATE" jdbcType="DATE"/>
+        <result column="PROPERTYVALUE" property="PROPERTYVALUE" jdbcType="NUMERIC"/>
+        <result column="DELTAVALUE" property="DELTAVALUE" jdbcType="NUMERIC"/>
+        <result column="RECORDTIME" property="RECORDTIME" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="RunTimeResultMap" type="com.example.mytask.entity.EquipTimeLong">
+        <!--<id column="id" property="id" jdbcType="INTEGER"/>-->
+        <result column="EQUIPMENTID" property="equipmentId" jdbcType="NVARCHAR"/>
+        <result column="EQUIPMENTCLASSID" property="equipmentClassId" jdbcType="NVARCHAR"/>
+        <result column="PROPERTYID" property="propertyId" jdbcType="NVARCHAR"/>
+        <result column="PROPERTYNAME" property="propertyName" jdbcType="NVARCHAR"/>
+        <result column="PROPERTYVALUE" property="propertyValue" jdbcType="NVARCHAR"/>
+        <result column="PROPERTYFLAG" property="propertyFlag" jdbcType="NVARCHAR"/>
+        <result column="PROCESSVALUECONDITION" property="processValueCondition"
+                jdbcType="NVARCHAR"/>
+        <result column="PROCESSVALUE" property="processValue" jdbcType="NVARCHAR"/>
+    </resultMap>
+
+    <select id="getTimeLong" parameterType="com.example.mytask.entity.GetTimeLongParas"
+            resultMap="RunTimeResultMap">
+SELECT VEE.EQUIPMENTID,
+       VEE.EQUIPMENTCLASSID,
+       VEE.PROPERTYID,
+       VEE.PROPERTYNAME,
+       VEE.PROPERTYVALUE,
+       PE.PROPERTYFLAG,
+       PE.PROCESSVALUECONDITION,
+       PE.PROCESSVALUE
+FROM V_EMS_EQUIPMENTPROPERTY AS VEE
+       LEFT JOIN PDS_EQUIPPROPERTY PE ON VEE.PROPERTYVALUE = PE.PROPERTYID
+WHERE VEE.PROPERTYID = #{propertyId, jdbcType=NVARCHAR}
+  AND VEE.PROPERTYVALUE IS NOT NULL;
+    </select>
+
+    <select id="getYesterdayCount"
+            parameterType="com.example.mytask.entity.GetEmsRunTimeStatsParas"
+            resultMap="RunTimeStatResultMap">
+        SELECT EQUIPELEMENTID, EQUIPPROPERTYID, EMSPROPERTYID, RECORDDATE, PROPERTYVALUE,
+        DELTAVALUE,
+        RECORDTIME
+         FROM EMS_RUN_TIME_STATS
+         WHERE EMSPROPERTYID = #{emsPropertyId, jdbcType=NVARCHAR} AND RECORDDATE=
+         #{recordDate, jdbcType=DATE};
+    </select>
+
+    <insert id="addEmsRunTimeStats" parameterType="com.example.mytask.entity.EmsRunTimeStats">
+      INSERT INTO [dbo].[EMS_RUN_TIME_STATS]
+      ([EQUIPELEMENTID]
+      ,[EQUIPPROPERTYID]
+      ,[EMSPROPERTYID]
+      ,[RECORDDATE]
+      ,[PROPERTYVALUE]
+      ,[DELTAVALUE]
+      ,[RECORDTIME]
+      ,[STOPTIME]
+      ,[NOFAULTTIME]
+       )
+      VALUES
+      (#{EQUIPELEMENTID,jdbcType=NVARCHAR}, #{EQUIPPROPERTYID,jdbcType=NVARCHAR},
+      #{EMSPROPERTYID, jdbcType=NVARCHAR},
+      #{RECORDDATE,jdbcType=DATE}, #{PROPERTYVALUE,jdbcType=NUMERIC}, #{DELTAVALUE,jdbcType=NUMERIC},
+      #{RECORDTIME,jdbcType=TIMESTAMP}, #{STOPTIME,jdbcType=NUMERIC},
+      #{NOFAULTTIME,jdbcType=NUMERIC})
+  </insert>
+</mapper>

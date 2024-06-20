@@ -1,4 +1,4 @@
-package com.example.mytask.mqtt;
+package com.example.mytask.service.archiveMqttMessage;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

@@ -218,7 +218,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.example.mqtt.MqttApplication</mainClass>
+                            <mainClass>com.example.mytask.MqttApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

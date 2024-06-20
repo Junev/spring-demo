@@ -1,0 +1,37 @@
+spring:
+  #  datasource:
+  #    type: com.alibaba.druid.pool.DruidDataSource
+  #    driver-class-name: oracle.jdbc.OracleDriver
+  #    url: jdbc:oracle:thin:@//192.168.78.135:1521/MDB
+  #    username: dbzs
+  #    password: Ksecq1w2e3r4t5
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://172.18.92.30:1433;database=YXZSDB;Encrypt=False;
+    username: sa
+    password: Yxzs@2024...
+  transaction:
+    management:
+      enabled: true
+    default-timeout: 30s
+    rollback-on-commit-failure: true
+    assert-existing-transaction: true
+    jta:
+      enabled: true
+mybatis:
+  mapper-locations: classpath*:xml/*Mapper.xml
+mqtt:
+  broker: tcp://192.168.40.20:1883
+  clientId: mqttx_e4b1da48
+  username: emqtest1
+  password: passwd~!@eClient.10#$%^&*()_+
+opcua:
+  url: opc.tcp://172.18.92.27:49321
+  username: ksec.opcua
+  password: ksecq1w2e3r4t5...
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: INFO
+ksecapi:
+  url: http://192.168.40.20:81

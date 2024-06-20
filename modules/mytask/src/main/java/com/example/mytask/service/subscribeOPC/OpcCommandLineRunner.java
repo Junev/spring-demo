@@ -1,4 +1,4 @@
-package com.example.mytask.opcua;
+package com.example.mytask.service.subscribeOPC;
 
 import org.eclipse.milo.opcua.sdk.client.api.UaClient;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;

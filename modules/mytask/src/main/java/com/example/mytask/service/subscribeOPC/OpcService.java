@@ -1,4 +1,4 @@
-package com.example.mytask.opcua;
+package com.example.mytask.service.subscribeOPC;
 
 import com.example.repository.mapper.PdsEquippropertyMapper;
 import com.example.repository.mapper.PrdTaskCpMapper;
@@ -37,7 +37,7 @@ public class OpcService {
     @Autowired
     private PrdTaskCpMapper cpMapper;
 
-    void subscribeNode() throws UaException {
+    public void subscribeNode() throws UaException {
         ManagedSubscription managedSubscription = ManagedSubscription.create((OpcUaClient) client);
         managedSubscription.addStatusListener(new MyOpcStatusListener(this));
 

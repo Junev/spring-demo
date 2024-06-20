@@ -44,7 +44,14 @@
         <!--<property name="enableSubPackages" value="false" />-->
         <!--</javaClientGenerator>-->
 
-        <table tableName="PDS_EQUIPPROPERTY"/>
-        <table tableName="PRD_TASK_CP"/>
+        <!--<table tableName="PDS_EQUIPELEMENT"/>-->
+        <!--<table tableName="PDS_EQUIPPROPERTY"/>-->
+        <!--<table tableName="PRD_TASK_CP"/>-->
+        <!--<table tableName="PRD_BATCH"/>-->
+        <!--<table tableName="PRD_UNITCMD"/>-->
+        <!--<table tableName="SILOINFO"/>-->
+        <table tableName="EMS_RUN_TIME_STATS"/>
+        <!--<table tableName="PRD_UNITCMD_PARAS"/>-->
+        <!--<table tableName="V_PRD_CELLTASKSTOPRECORD"/>-->
     </context>
 </generatorConfiguration>

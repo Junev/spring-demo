@@ -1,4 +1,4 @@
-package com.example.mytask.mqtt;
+package com.example.mytask.service.addMqttTrigger;
 
 import com.example.repository.mapper.PdsMqtttopicTriggerMapper;
 import com.example.repository.model.PdsMqtttopicTrigger;
