@@ -27,7 +27,11 @@ public class TimeByConditionListener implements OpcValueListener {
     private Pattern pattern = Pattern.compile("(\\w+)(<|>|<=|>=|!=|=)(\\w+)");
 
     @Override
-    public void update(Map<String, PdsEquipproperty> eps) {
+    public void init() {
+    }
+
+    @Override
+    public void update(Map<String, PdsEquipproperty> eps, String unitId) {
         boolean isLocked = runTimeLock.tryLock();
         if (isLocked) {
             try {

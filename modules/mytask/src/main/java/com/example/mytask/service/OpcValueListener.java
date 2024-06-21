@@ -5,5 +5,6 @@ import com.example.repository.model.PdsEquipproperty;
 import java.util.Map;
 
 public interface OpcValueListener {
-    void update(Map<String, PdsEquipproperty> eps);
+    void init();
+    void update(Map<String, PdsEquipproperty> eps, String unitId);
 }

@@ -36,7 +36,10 @@ public class OpcValueChangeListener implements OpcValueListener {
     }
 
     @Override
-    public void update(Map<String, PdsEquipproperty> epsValueMap) {
+    public void init() {}
+
+    @Override
+    public void update(Map<String, PdsEquipproperty> epsValueMap, String unitId) {
 //        System.out.println("epsValue = " + epsValue);
 //        System.out.println("epsValue1_" + epsValue.get(213).getValue());
 //        System.out.println("siloIds = " + siloIds);

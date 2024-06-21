@@ -3,6 +3,7 @@ package com.example.mytask.service;
 import com.example.mytask.opcua.MyOpcUaClient;
 import com.example.mytask.service.archiveEquipmentTime.TimeByConditionListener;
 import com.example.mytask.service.archiveSILO.OpcValueChangeListener;
+import com.example.mytask.service.caculate.CaculateAbstractListener;
 import com.example.repository.mapper.PdsEquipelementMapper;
 import com.example.repository.mapper.PdsEquippropertyMapper;
 import com.example.repository.mapper.PrdUnitcmdMapper;
@@ -15,11 +16,12 @@ import org.eclipse.milo.opcua.stack.core.UaRuntimeException;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +34,8 @@ import java.util.stream.IntStream;
 
 @Component
 public class ScanOpcService {
+    private static final Logger logger
+            = LoggerFactory.getLogger(ScanOpcService.class);
 
     @Autowired
     private MyOpcUaClient myUaClient;
@@ -51,57 +55,83 @@ public class ScanOpcService {
     @Autowired
     private TimeByConditionListener listener2;
 
+    @Autowired
+    private CaculateAbstractListener listener3;
+
     public void run() {
         UaClient opcUaClient = myUaClient.connect();
 
         OpcValueSubject opcSubject = new OpcValueSubject();
 //        opcSubject.addListener(listener1);
-//        opcSubject.addListener(listener2);
+        opcSubject.addListener(listener2);
 
-        /* 分段初始化
+        listener3.init();
+        opcSubject.addListener(listener3);
+
+        // 分段初始化
         HashMap<String, List<PdsEquipproperty>> unitMap = new HashMap<>();
         HashMap<String, List<PdsEquipproperty>> siloMap = new HashMap<>();
 
         init(unitMap, siloMap);
 
         List<PdsEquipproperty> allUnitEps = getEps(unitMap);
-        List<NodeId> allUnitNodeIds = getNodeIds(allUnitEps);
+//        List<NodeId> allUnitNodeIds = getNodeIds(allUnitEps);
 
-        List<PdsEquipproperty> allSiloEps = getEps(siloMap);
-        List<NodeId> allSiloNodeIds = getNodeIds(allSiloEps);
-         */
+//        List<PdsEquipproperty> allSiloEps = getEps(siloMap);
+//        List<NodeId> allSiloNodeIds = getNodeIds(allSiloEps);
 
-        List<PdsEquipproperty> allEps = getEquipPropertiesByPrefix("6150005203%");
-        List<NodeId> allNodeIds = getNodeIds(allEps);
 
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        List<PdsEquipproperty> allEps = getEquipPropertiesByPrefix("6150005203%");
+//        List<NodeId> allNodeIds = getNodeIds(allEps);
 
-        Runnable task = () -> {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(8);
+
+        for (Map.Entry<String, List<PdsEquipproperty>> entry : unitMap.entrySet()) {
+            List<NodeId> unitNodeIds = getNodeIds(entry.getValue());
+
+            Runnable unitTask = getRunnable(opcUaClient, opcSubject, unitNodeIds, entry.getKey(), entry.getValue());
+            scheduler.scheduleAtFixedRate(unitTask, 0, 1, TimeUnit.SECONDS);;
+        }
+    }
+
+    private static Runnable getRunnable(UaClient opcUaClient,
+                                        OpcValueSubject opcSubject,
+                                        List<NodeId> unitNodeIds,
+                                        String unitId,
+                                        List<PdsEquipproperty> eps) {
+        Runnable scanOnce = () -> {
             try {
+                if (unitNodeIds.isEmpty()) {
+                    return;
+                }
                 List<DataValue> dataValues = opcUaClient.readValues(0,
                         TimestampsToReturn.Neither,
-                        allNodeIds).get();
+                        unitNodeIds).get();
                 List<Object> dvs = dataValues.stream()
                         .map(c -> c.getValue().getValue())
                         .collect(Collectors.toList());
-                System.out.println(LocalDateTime.now().toString() + " read opcua"  + dvs);
-                Map<String, PdsEquipproperty> epsValue = IntStream.range(0, allEps.size())
-                        .mapToObj(c -> {
-                            PdsEquipproperty p = new PdsEquipproperty();
-                            BeanUtils.copyProperties(allEps.get(c), p);
-                            p.setValue(dataValues.get(c).getValue().getValue());
-                            return p;
-                        })
-                        .collect(Collectors.toMap(PdsEquipproperty::getPropertyid, t -> t,
-                                (v1, v2) -> v2));
+//                logger.info(unitId + " read opcua "  + dvs);
+//                if (unitId.startsWith("6150005203ZSC02")) {
+//                    System.out.println("dvs = " + dvs);
+//                }
+                Map<String, PdsEquipproperty> epsValue = IntStream.range(0, eps.size())
+                            .mapToObj(c -> {
+                                PdsEquipproperty p = new PdsEquipproperty();
+                                BeanUtils.copyProperties(eps.get(c), p);
+                                p.setValue(dataValues.get(c).getValue().getValue());
+                                return p;
+                            })
+                            .collect(Collectors.toMap(PdsEquipproperty::getPropertyid, t -> t,
+                                    (v1, v2) -> v2));
 //                System.out.println("epsValue = " + epsValue);
-                opcSubject.notify(epsValue);
+                opcSubject.notify(epsValue, unitId);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("scan opc error: ",e);
+//                    e.printStackTrace();
             }
         };
 
-        scheduler.scheduleAtFixedRate(task, 0, 2, TimeUnit.SECONDS);
+        return scanOnce;
     }
 
     private List<NodeId> getNodeIds(List<PdsEquipproperty> allUnitEps) {
