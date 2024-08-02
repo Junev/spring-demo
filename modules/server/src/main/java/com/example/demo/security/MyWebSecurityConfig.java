@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +26,10 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    HrService hrService;
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -42,43 +47,48 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.userDetailsService();
     }
 
-    @Autowired
-    HrService hrService;
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("root").password(passwordEncoder().encode("123")).roles("admin",
-//                "personnel")
-//                .and()
-//                .withUser("bruce").password(passwordEncoder().encode("123")).roles("personnel");
-        auth.userDetailsService(hrService);
+        auth.inMemoryAuthentication()
+                .withUser("root").password(passwordEncoder().encode("123")).roles("admin",
+                "personnel")
+                .and()
+                .withUser("bruce").password(passwordEncoder().encode("123")).roles("personnel");
+//        auth.userDetailsService(hrService);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
 //                .cors()
-//                .configurationSource(request -> new CorsConfiguration()
-//                .applyPermitDefaultValues())
+    //                .configurationSource(request -> new CorsConfiguration()
+    //                .applyPermitDefaultValues())
 //                .and()
-                .csrf()
-                .disable()
+//                .csrf()
+//                  .disable()
                 .authorizeRequests()
-                .antMatchers("/oauth/**", "/login/**", "/logout/**")
-                .permitAll()
+                    .antMatchers("/static/**", "/oauth/**", "/login/**", "/logout/**")
+                    .permitAll()
                 .antMatchers("/admin/**")
-                .hasRole("admin")
-                .antMatchers("/user/**", "/api", "/mdb", "/hr/**", "/book/**", "/book")
-                .access("hasAnyRole('admin', 'personnel')")
-                .anyRequest()
-                .authenticated()
+                    .hasRole("admin")
+                    .antMatchers("/user/**", "/api", "/mdb", "/hr/**", "/book/**", "/book")
+                    .access("hasAnyRole('admin', 'personnel')")
+                    .anyRequest()
+                    .authenticated()
+
+                // OAuth2 下无效
                 .and()
-                .formLogin()
-                .loginProcessingUrl("/login")
-                .permitAll();
+                    .formLogin()
+                    .loginProcessingUrl("/login")
+                    .permitAll();
 //                .and().addFilterBefore(corsFilter(), ChannelProcessingFilter.class);
     }
+
 
     // 没有效果，所以关闭，使用MyCorsFilter
     //    @Bean

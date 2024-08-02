@@ -26,6 +26,5 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //所有的访问都需要认证访问
         http.authorizeRequests().anyRequest().authenticated();
 
-
     }
 }

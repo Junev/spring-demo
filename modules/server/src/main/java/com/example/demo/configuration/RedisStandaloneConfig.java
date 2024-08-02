@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "spring.redis")
 @Data
 public class RedisStandaloneConfig {
-    private static final String DEFAULT_HOST = "localhost";
-    private static final int DEFAULT_PORT = 6379;
+    private static String DEFAULT_HOST = "localhost";
+    private static int DEFAULT_PORT = 6379;
 
-    private String hostName = DEFAULT_HOST;
+    private String host = DEFAULT_HOST;
     private int port = DEFAULT_PORT;
     private int database;
     private @Nullable
@@ -28,21 +28,21 @@ public class RedisStandaloneConfig {
     RedisStandaloneConfiguration redisStandaloneConfiguration() {
         RedisStandaloneConfiguration config =
                 new RedisStandaloneConfiguration();
-        config.setHostName(this.hostName);
+        config.setHostName(this.host);
         config.setPort(this.port);
         config.setDatabase(this.database);
-//        config.setUsername(this.username);
-//        config.setPassword(this.password);
+        config.setUsername(this.username);
+        config.setPassword(this.password);
         return config;
     }
 
     @Bean
     RedisURI redisURI() {
         return RedisURI.builder()
-                .withHost(this.hostName)
+                .withHost(this.host)
                 .withPort(this.port)
                 .withDatabase(this.database)
-//                .withAuthentication(this.username, this.password.toString())
+                .withAuthentication(this.username, this.password.toString())
                 .build();
     }
 

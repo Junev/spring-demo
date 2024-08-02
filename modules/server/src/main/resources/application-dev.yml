@@ -9,14 +9,20 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/vhr?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/vhr?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: root
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://127.0.0.1:1433;database=vhr;Encrypt=False;
+    username: sa
+    password: q1w2e3r4t5...
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 172.23.98.99
     port: 6379
+    username:
+    password: q1w2e3r4t5
 #    lettuce:
 #      pool:
 #        enabled: true
@@ -27,8 +33,7 @@ spring:
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
-
-mybook:
+    org.springframework.security: DEBUG
   name: 罗贯中
   author: 罗贯中
   price: 300

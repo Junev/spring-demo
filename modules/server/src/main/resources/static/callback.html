@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>callback</title>
+</head>
+<body>
+    <script>
+        const urlSP = new URLSearchParams(location.search)
+        const newUrl = new URLSearchParams()
+        newUrl.append("grant_type", "authorization_code")
+        newUrl.append("code", urlSP.get('code'))
+        newUrl.append("redirect_uri", "http://localhost:9090/callback")
+        newUrl.append("client_id", "code")
+        newUrl.append("client_secret", "123")
+        fetch('http://localhost:9090/oauth/token', {
+            method: 'post',
+            body: newUrl,
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
+        }).then(res => res.json()).then(console.log)
+    </script>
+</body>
+</html>

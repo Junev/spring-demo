@@ -30,7 +30,7 @@ public class MyCorsFilter implements Filter {
                 "-Type");
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        System.out.println(req.getMethod());
+//        System.out.println(req.getMethod());
         if (req.getMethod().equals("OPTIONS")) {
 
             servletResponse.getWriter().println("ok");
