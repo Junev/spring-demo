@@ -5,15 +5,16 @@
     <title>CORS</title>
 </head>
 <body>
-<script>
-    fetch('http://localhost:9090/book', {
-        method: 'post',
-        body: JSON.stringify({foo: 123}),
-        headers: {
-            "Content-Type": 'application/json',
-            "Authorization": "Bearer " + "fdc457d0-5ed7-4bf5-8838-5bb35662d60f"
-        }
-    }).then(res => res.json()).then(console.log)
-</script>
+    Check console panel!
+    <script>
+        fetch('http://localhost:9090/admin/hello', {
+            method: 'post',
+            body: JSON.stringify({foo: 123}),
+            headers: {
+                "Content-Type": 'application/json',
+                "Authorization": "Bearer " + "0b38001d-9009-4249-a654-44657b5fe3b0"
+            }
+        }).then(res => res.json()).then(console.log)
+    </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.example.demo.security;
+package com.example.demo.security.oauth;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 /**
  * OAuth2 授权服务器
  * <a href="https://docs.spring.io/spring-security-oauth2-boot/docs/2.2.0.M3/reference/html/boot-features-security-oauth2-authorization-server.html">...</a>
+ * <a href="https://stackoverflow.com/questions/44625488/spring-security-cors-error-when-enable-oauth2">...</a>
  */
 @Configuration
 @EnableAuthorizationServer

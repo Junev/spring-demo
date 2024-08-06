@@ -4,6 +4,7 @@ import com.example.demo.service.HrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,8 +24,9 @@ import java.util.Arrays;
  * @see <a href="https://blog.csdn.net/weixin_40379712/article/details/130056716">废弃的</a>
  * @see <a href="https://blog.csdn.net/qq_35067322/article/details/115878528">WebSecurity</a>
  */
+
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -59,59 +61,38 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/static/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .cors()
-    //                .configurationSource(request -> new CorsConfiguration()
-    //                .applyPermitDefaultValues())
-//                .and()
 //                .csrf()
 //                  .disable()
                 .authorizeRequests()
                     .antMatchers("/static/**", "/oauth/**", "/login/**", "/logout/**")
-                    .permitAll()
-                .antMatchers("/admin/**")
-                    .hasRole("admin")
-                    .antMatchers("/user/**", "/api", "/mdb", "/hr/**", "/book/**", "/book")
-                    .access("hasAnyRole('admin', 'personnel')")
-                    .anyRequest()
-                    .authenticated()
+                        .permitAll()
+                    .antMatchers("/admin/**")
+                        .hasRole("admin")
+                        .antMatchers("/user/**", "/api", "/mdb", "/hr/**", "/book/**", "/book")
+                        .access("hasAnyRole('admin', 'personnel')")
+                        .anyRequest()
+                        .authenticated()
 
-                // OAuth2 下无效
                 .and()
                     .formLogin()
                     .loginProcessingUrl("/login")
                     .permitAll();
-//                .and().addFilterBefore(corsFilter(), ChannelProcessingFilter.class);
     }
 
 
-    // 没有效果，所以关闭，使用MyCorsFilter
-    //    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://192.168.40.20:1888"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD",
-                "GET", "POST", "PUT", "DELETE", "PATCH"));
-        // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the
-        // wildcard '*' when the request's credentials mode is 'include'.
-        configuration.setAllowCredentials(true);
-        // setAllowedHeaders is important! Without it, OPTIONS preflight request
-        // will fail with 403 Invalid CORS request
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content" +
-                "-Type"));
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    protected CorsConfigurationSource getCorsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        return new CorsFilter(corsConfigurationSource());
-//    }
 }
