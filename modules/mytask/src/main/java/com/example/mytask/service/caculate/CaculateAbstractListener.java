@@ -28,6 +28,7 @@ public class CaculateAbstractListener implements OpcValueListener {
     private UaClient client;
 
     private HashMap<String, FixedSizeQueue<PdsEquipproperty>> map = new HashMap<>();
+    private HashMap<String, Integer> delayCount = new HashMap<>();
 
     public void init() {
         client = myUaClient.connect();
@@ -35,25 +36,68 @@ public class CaculateAbstractListener implements OpcValueListener {
 
     @Override
     public void update(Map<String, PdsEquipproperty> eps, String unitId) {
-//        if (unitId.startsWith("6150005203ZSC02")) {
-            for (Map.Entry<String, PdsEquipproperty> entry : eps.entrySet()) {
-                String key = entry.getKey();
-                PdsEquipproperty ep = eps.get(key);
-                map.computeIfAbsent(key, k -> new FixedSizeQueue<>(30));
+        String key1 = "u900201pt0201";
+        PdsEquipproperty key1ep = eps.get(key1);
+        
+        map.computeIfAbsent(key1, k -> new FixedSizeQueue<>(30));
+        // queue存储前30秒数据
+        FixedSizeQueue<PdsEquipproperty> queue = map.get(key1);
 
-                if (ep != null) {
-                    FixedSizeQueue<PdsEquipproperty> queue = map.get(key);
-                    queue.enqueue(ep);
+        String key2 = "u900201pt0202";
+        PdsEquipproperty key2ep = eps.get(key2);
+        
+
+        if (key1ep == null || key2ep == null) {
+            return;
+        }
+        Float key1epValue = (Float) key1ep.getValue();
+        Float key2epValue = (Float) key2ep.getValue();
+
+        if (key1ep.getValue().equals(0) && key2ep.getValue().equals(0)) {
+            map.remove(key1);
+        }
+
+        // 计算数据对齐延时
+        //
+        if (queue.size() != 0) {
+            PdsEquipproperty lastEp = queue.getLast();
+            if (lastEp != null) {
+                if (lastEp.getValue().equals(0F) && !key1ep.getValue().equals(0F)) {
+                    delayCount.put(key1, 0);
+                } else {
+                    // delayCount少1
+                    if (!key1ep.getValue().equals(0F) && key2ep.getValue().equals(0F)) {
+                        Integer i = delayCount.get(key1);
+                        if (i != null) {
+                            delayCount.put(key1, i + 1);
+                        }
+                    }
                 }
             }
-//        }
+        }
 
-        CompletableFuture<StatusCode> future = client.writeValue(
-                NodeId.parse("ns=2;s=通道 1.设备 1.test0001"), DataValue.valueOnly(new Variant((float) 0)));
-        try {
-            future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("write value error ", e);
+        Float result = 0F;
+        if (delayCount.get(key1) != null) {
+            int ep1ccIndex = queue.size() - delayCount.get(key1) - 2;
+            if (ep1ccIndex > -1 && ep1ccIndex < queue.size()) {
+                PdsEquipproperty ep1acc = queue.get(ep1ccIndex);
+                Float ep1accValue = (Float) ep1acc.getValue();
+                result = key2epValue / ep1accValue;
+            }
+        }
+        queue.enqueue(key1ep);
+
+        System.out.println("key1: " + key1epValue + " key2: "+ key2epValue +
+                " delay： " + delayCount.get(key1) +
+                " result: " + result);
+        if (key1ep.getValue() != null) {
+            CompletableFuture<StatusCode> future = client.writeValue(
+                    NodeId.parse("ns=2;s=simu.simu.test0001"), DataValue.valueOnly(new Variant(result)));
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                logger.error("write value error ", e);
+            }
         }
     }
 }

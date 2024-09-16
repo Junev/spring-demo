@@ -27,4 +27,10 @@ public class FixedSizeQueue<T> {
     public int size() {
         return queue.size();
     }
+
+    public T getLast() {
+        return queue.getLast();
+    }
+
+    public T get(int index) { return queue.get(index); }
 }

@@ -18,7 +18,6 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -84,7 +83,7 @@ public class ScanOpcService {
 //        List<PdsEquipproperty> allEps = getEquipPropertiesByPrefix("6150005203%");
 //        List<NodeId> allNodeIds = getNodeIds(allEps);
 
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(8);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(16);
 
         for (Map.Entry<String, List<PdsEquipproperty>> entry : unitMap.entrySet()) {
             List<NodeId> unitNodeIds = getNodeIds(entry.getValue());
@@ -117,7 +116,11 @@ public class ScanOpcService {
                 Map<String, PdsEquipproperty> epsValue = IntStream.range(0, eps.size())
                             .mapToObj(c -> {
                                 PdsEquipproperty p = new PdsEquipproperty();
-                                BeanUtils.copyProperties(eps.get(c), p);
+                                PdsEquipproperty op = eps.get(c);
+//                                BeanUtils.copyProperties(eps.get(c), p);
+//                                p.setEquipmentid(op.getEquipmentid());
+                                p.setPropertyid(op.getPropertyid());
+//                                p.setTagaddress(op.getTagaddress());
                                 p.setValue(dataValues.get(c).getValue().getValue());
                                 return p;
                             })
