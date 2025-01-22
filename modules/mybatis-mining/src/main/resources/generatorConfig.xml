@@ -1,0 +1,61 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="simple" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.CachePlugin">
+            <property name="cacheType" value="org.apache.ibatis.cache.impl.PerpetualCache"/>
+            <property name="cacheEnabled" value="true"/>
+            <property name="cache_eviction" value="LRU" />
+            <property name="cache_size" value="1024" />
+        </plugin>
+
+<!--        <jdbcConnection driverClass="oracle.jdbc.OracleDriver"-->
+<!--            connectionURL="jdbc:oracle:thin:@192.168.78.135:1521/MDB"-->
+<!--            userId="dbzs"-->
+<!--            password="Ksecq1w2e3r4t5"-->
+<!--            >-->
+<!--            <property name="remarksReporting" value="true" />-->
+<!--        </jdbcConnection>-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://172.23.98.99:3306/practice"
+                        userId="root"
+                        password="my-secret-pw"
+        />
+
+        <javaModelGenerator targetPackage="com.example.mybatis.model"
+                            targetProject="src/main/java"/>
+
+        <sqlMapGenerator targetPackage="com.example.mybatis.mapper"
+                         targetProject="src/main/resources"/>
+
+        <!--targetRuntime为MyBatis3时，需要配置type="XMLMAPPER"-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.mybatis.mapper"
+                             targetProject="src/main/java"/>
+
+<!--        &lt;!&ndash; targetProject:生成PO类的位置 &ndash;&gt;-->
+<!--        <javaModelGenerator targetPackage="com.data.flag.entity" targetProject="src/main/java">-->
+<!--        &lt;!&ndash; enableSubPackages:是否让schema作为包的后缀 &ndash;&gt;-->
+<!--        <property name="enableSubPackages" value="false" />-->
+<!--        &lt;!&ndash; 从数据库返回的值被清理前后的空格 &ndash;&gt;-->
+<!--        <property name="trimStrings" value="true" />-->
+<!--        </javaModelGenerator>-->
+
+        <!--&lt;!&ndash; targetProject:mapper映射文件生成的位置 &ndash;&gt;-->
+        <!--<sqlMapGenerator targetPackage="mybatis.mapping" targetProject="src/main/resources">-->
+        <!--&lt;!&ndash; enableSubPackages:是否让schema作为包的后缀 &ndash;&gt;-->
+        <!--<property name="enableSubPackages" value="false" />-->
+        <!--</sqlMapGenerator>-->
+
+        <!--&lt;!&ndash; targetPackage：mapper接口生成的位置 &ndash;&gt;-->
+        <!--<javaClientGenerator targetPackage="com.data.flag.xml" targetProject="src/main/java" type="XMLMAPPER">-->
+        <!--&lt;!&ndash; enableSubPackages:是否让schema作为包的后缀 &ndash;&gt;-->
+        <!--<property name="enableSubPackages" value="false" />-->
+        <!--</javaClientGenerator>-->
+
+        <table tableName="country"/>
+        <table tableName="%sys_%" />
+    </context>
+</generatorConfiguration>
