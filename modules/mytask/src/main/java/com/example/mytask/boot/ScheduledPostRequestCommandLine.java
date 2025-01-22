@@ -17,6 +17,8 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -30,7 +32,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-//@Component
+@Component
+@ConditionalOnProperty(name = "feature.scheduledPostRequest.enabled", havingValue = "true")
 public class ScheduledPostRequestCommandLine implements CommandLineRunner {
     @Value("${ksecapi.url}")
     private String apiUrl;
@@ -64,7 +67,7 @@ public class ScheduledPostRequestCommandLine implements CommandLineRunner {
 
                 ZoneId zoneId = TimeZone.getDefault().toZoneId();
                 LocalDateTime now = LocalDateTime.now();
-                LocalDateTime lastHour = now.plusHours(-240L);
+                LocalDateTime lastHour = now.plusHours(-2400L);
                 System.out.println("------------------------------------处理缺失数据-------------------------------");
                 Instant endInstant = now.atZone(zoneId).toInstant();
                 Instant startInstant = lastHour.atZone(zoneId).toInstant();
@@ -75,11 +78,11 @@ public class ScheduledPostRequestCommandLine implements CommandLineRunner {
                         .andExestarttimeGreaterThan(startDate)
                         .andExestarttimeLessThan(endDate);
                 List<PrdUnitcmd> cmds = unitcmdMapper.selectByExample(ex);
-                cmds.forEach(c -> {
-                    Integer prodDocRes = prodDoc(sid, c.getTaskid());
-
-                });
-                System.out.println(LocalDateTime.now().toString() + " 重算产耗完成");
+//                cmds.forEach(c -> {
+//                    Integer prodDocRes = prodDoc(sid, c.getTaskid());
+//
+//                });
+//                System.out.println(LocalDateTime.now().toString() + " 重算产耗完成");
 
 //                cmds.stream().filter(c -> c.getSchedstatus() == 1).forEach(k -> {
 //                    Integer quaRes = quaRestatistic(sid, k.getCmdid());
@@ -93,7 +96,7 @@ public class ScheduledPostRequestCommandLine implements CommandLineRunner {
                 System.out.println(LocalDateTime.now().toString() + " 贮柜存料时间计算完成");
 
                 PrdBatchExample eb = new PrdBatchExample();
-                LocalDateTime lastMonth = now.plusDays(-24L);
+                LocalDateTime lastMonth = now.plusDays(-2400L);
                 eb.createCriteria()
                         .andExestarttimeGreaterThan(Date.from(lastMonth.atZone(zoneId)
                                 .toInstant()));

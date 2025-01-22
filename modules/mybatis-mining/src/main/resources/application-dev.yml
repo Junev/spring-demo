@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.23.98.99:3306/practice?user=root&password=my-secret-pw
+    username: root
+    password: my-secret-pw
+  transaction:
+    management:
+      enabled: true
+    default-timeout: 30s
+    rollback-on-commit-failure: true
+    assert-existing-transaction: true
+    jta:
+      enabled: true
+#  flyway:
+#    enabled: true
+#    url: jdbc:mysql://172.23.98.99:3306/practice?user=root&password=my-secret-pw
+#    username: root
+#    password: my-secret-pw
+#mybatis:
+#  mapper-locations: classpath*:xml/*Mapper.xml
+mqtt:
+  broker: tcp://192.168.40.20:1883
+  clientId: mqttx_e4b1da48
+  username: emqtest1
+  password: passwd~!@eClient.10#$%^&*()_+
+opcua:
+  url: opc.tcp://192.168.40.19:49320
+  username: ksec.opcua
+  password: q1w2e3r4t5
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: TRACE
+ksecapi:
+  url: http://192.168.40.20:81

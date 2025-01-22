@@ -4,11 +4,13 @@ import com.example.mytask.service.ScanOpcService;
 import com.example.repository.model.PdsEquipproperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@ConditionalOnProperty(name = "feature.scanOpc.enabled", havingValue = "true")
 class ScanOpcCommandLine implements CommandLineRunner {
     @Autowired
     private List<PdsEquipproperty> timeEps;

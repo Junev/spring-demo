@@ -19,6 +19,7 @@ import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
+@ConditionalOnProperty(name = "feature.scanOpc.enabled", havingValue = "true")
 public class ScanOpcService {
     private static final Logger logger
             = LoggerFactory.getLogger(ScanOpcService.class);
@@ -57,19 +59,21 @@ public class ScanOpcService {
     @Autowired
     private CaculateAbstractListener listener3;
 
+    // 分段初始化
+    HashMap<String, List<PdsEquipproperty>> unitMap = new HashMap<>();
+    HashMap<String, List<PdsEquipproperty>> siloMap = new HashMap<>();
+
     public void run() {
-        UaClient opcUaClient = myUaClient.connect();
+//        UaClient opcUaClient = myUaClient.connect();
+        UaClient opcUaClient = null;
 
         OpcValueSubject opcSubject = new OpcValueSubject();
 //        opcSubject.addListener(listener1);
         opcSubject.addListener(listener2);
 
-        listener3.init();
-        opcSubject.addListener(listener3);
+//        listener3.init();
+//        opcSubject.addListener(listener3);
 
-        // 分段初始化
-        HashMap<String, List<PdsEquipproperty>> unitMap = new HashMap<>();
-        HashMap<String, List<PdsEquipproperty>> siloMap = new HashMap<>();
 
         init(unitMap, siloMap);
 
@@ -175,30 +179,8 @@ public class ScanOpcService {
         List<PdsEquipelement> rootEqe = pdsEqeMapper.selectByExample(pdsEqeEx);
         rootEqe.forEach(this::getPdsEquipelementChildren);
 
-        rootEqe.forEach(c2 -> {
-            // c2第二层
-            c2.getChildren().forEach(c3 -> {
-                        c3.getChildren().forEach(c4 -> {
-                            c4.getChildren().forEach(c5 -> {
-//                                System.out.println("c5 = " + c5.getEquipmentname());
-                                List<PdsEquipproperty> eps =
-                                        getEquipPropertiesByParentID(
-                                                c5.getEquipmentid());
-                                unitMap.put(c5.getEquipmentid(), eps);
+        rootEqe.forEach(this::getPdsEquipelementProperties);
 
-                                c5.getChildren().forEach(c6 -> {
-                                    if (c6.getEquipmentname().contains("柜")) {
-//                                        System.out.println("c6 = " + c6.getEquipmentname());
-                                        List<PdsEquipproperty> eps2 =
-                                                getEquipPropertiesByParentID(c6.getEquipmentid());
-                                        siloMap.put(c6.getEquipmentid(), eps2);
-                                    }
-                                });
-                            });
-                        });
-                    }
-            );
-        });
     }
 
     private List<PdsEquipproperty> getEquipPropertiesByParentID(String parentId) {
@@ -220,6 +202,25 @@ public class ScanOpcService {
         c.setChildren(pdsEquipelements1);
         if (!pdsEquipelements1.isEmpty()) {
             pdsEquipelements1.forEach(this::getPdsEquipelementChildren);
+        }
+    }
+
+    private void getPdsEquipelementProperties(PdsEquipelement c) {
+        List<PdsEquipproperty> epps = getEquipPropertiesByParentID(
+                c.getEquipmentid());
+        c.setTags(epps);
+
+        if (c.getEeLevel() == 4) {
+            unitMap.put(c.getEquipmentid(), epps);
+        }
+
+        if (c.getEeLevel() == 5 && c.getEquipmentname().contains("柜")) {
+            siloMap.put(c.getEquipmentid(), epps);
+        }
+
+        List<PdsEquipelement> children = c.getChildren();
+        if (!children.isEmpty()) {
+            children.forEach(this::getPdsEquipelementProperties);
         }
     }
 }
