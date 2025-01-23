@@ -7,7 +7,7 @@
 <body>
     <div id="app"></div>
     <script>
-        if (!localStorage.getItem('token')) {
+        if (!sessionStorage.getItem('token')) {
             const app = document.querySelector("#app");
             app.innerHTML = 'Redirecting to login page...'
             setTimeout(() => {

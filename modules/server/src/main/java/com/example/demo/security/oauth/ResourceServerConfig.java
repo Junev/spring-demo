@@ -21,7 +21,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         //唯独user 可以访问 放行我们的资源
         http.requestMatchers().antMatchers("/admin/**", "/user/**", "/hr/**", "/book/**", "/api",
-                "/mdb");
+                "/mdb", "/upload");
 
         //所有的访问都需要认证访问
         http.authorizeRequests().anyRequest().authenticated();

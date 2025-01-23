@@ -28,7 +28,7 @@ public class FileUploadController {
         String[] splitedNames = oldFilename.split("\\.");
         String newFileName;
         if (splitedNames.length == 2) {
-            newFileName = splitedNames[0] + UUID.randomUUID().toString() + "." + splitedNames[1];
+            newFileName = splitedNames[0] + "-" + UUID.randomUUID().toString() + "." + splitedNames[splitedNames.length-1];
         } else {
             newFileName = oldFilename + UUID.randomUUID();
         }

@@ -12,7 +12,7 @@
             body: JSON.stringify({foo: 123}),
             headers: {
                 "Content-Type": 'application/json',
-                "Authorization": "Bearer " + "0b38001d-9009-4249-a654-44657b5fe3b0"
+                "Authorization": "Bearer " + sessionStorage.getItem("token")
             }
         }).then(res => res.json()).then(console.log)
     </script>
