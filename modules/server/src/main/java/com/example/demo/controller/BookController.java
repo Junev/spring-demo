@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -27,7 +26,7 @@ public class BookController {
     RedisClient redisClient;
 
     @Autowired
-    RedisTemplate redisTemplate;
+    RedisTemplate<String, Book> redisTemplate;
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
@@ -36,7 +35,7 @@ public class BookController {
      * MappingJacksonToHttpMessageConverter
      */
     @GetMapping("")
-    public Book book() throws ExecutionException, InterruptedException {
+    public Book book() {
         StatefulRedisConnection<String, String> connect = redisClient.connect();
         RedisAsyncCommands<String, String> asyncCommands = connect.async();
         RedisFuture<String> get1 = asyncCommands.get("name");
@@ -46,7 +45,7 @@ public class BookController {
         redisFutures.add(get1);
         redisFutures.add(set1);
         LettuceFutures.awaitAll(1, TimeUnit.MINUTES,
-                redisFutures.toArray(new RedisFuture[redisFutures.size()]));
+                redisFutures.toArray(new RedisFuture[0]));
 
 
         Book newBook = new Book();
@@ -70,11 +69,12 @@ public class BookController {
         String name = operations.get("name");
         System.out.println(name);
 
-        ValueOperations operations1 = redisTemplate.opsForValue();
+        ValueOperations<String, Book> operations1 = redisTemplate.opsForValue();
         Book book = new Book();
         book.setName("红楼梦");
         book.setAuthor("曹雪芹");
         operations1.set("b1", book);
+
         Object b1 = operations1.get("b1");
         System.out.println(b1);
 
