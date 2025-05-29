@@ -52,6 +52,8 @@ public class GreatEmsRunTimeJob {
     }
 
     @Scheduled(cron = "0 55 23 * * *")
+    // 每分钟
+    // @Scheduled(cron = "0/60 * * * * *")
     public void run() {
         boolean isLocked = runTimeLock.tryLock();
         if (isLocked) {
@@ -73,6 +75,7 @@ public class GreatEmsRunTimeJob {
                         v = l.longValue();
                     }
                     newRe.setPROPERTYVALUE(v);
+                    System.out.println("id = " + c.getPropertyid() + ", v = " + v);
                     newRe.setDELTAVALUE(v);
                     newRe.setRECORDTIME(new Date());
                     Long stopTime = longMap.getOrDefault(c.getPropertyid(), 0L);
@@ -88,11 +91,10 @@ public class GreatEmsRunTimeJob {
                     if (l != null) {
                         l.set(0);
                     }
-//            c.setValue(null);
                 });
 
                 System.out.println(LocalDateTime.now().toString() + " Great " +
-                        "job! 电机运行时间归档EMS_RUN_TIME_STATS完成");
+                        "job! 电机运行时间归档 EMS_RUN_TIME_STATS 完成");
             } finally {
                 runTimeLock.unlock();
             }

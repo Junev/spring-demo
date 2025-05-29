@@ -12,7 +12,6 @@ import com.example.repository.model.PdsEquipelementExample;
 import com.example.repository.model.PdsEquipproperty;
 import com.example.repository.model.PdsEquippropertyExample;
 import org.eclipse.milo.opcua.sdk.client.api.UaClient;
-import org.eclipse.milo.opcua.stack.core.UaRuntimeException;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
@@ -31,6 +30,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static com.example.mytask.utils.PdsEquipproptyUtils.getNodeIds;
 
 @Component
 @ConditionalOnProperty(name = "feature.scanOpc.enabled", havingValue = "true")
@@ -64,8 +65,8 @@ public class ScanOpcService {
     HashMap<String, List<PdsEquipproperty>> siloMap = new HashMap<>();
 
     public void run() {
-//        UaClient opcUaClient = myUaClient.connect();
-        UaClient opcUaClient = null;
+        UaClient opcUaClient = myUaClient.connect();
+//        UaClient opcUaClient = null;
 
         OpcValueSubject opcSubject = new OpcValueSubject();
 //        opcSubject.addListener(listener1);
@@ -77,8 +78,8 @@ public class ScanOpcService {
 
         init(unitMap, siloMap);
 
-        List<PdsEquipproperty> allUnitEps = getEps(unitMap);
-//        List<NodeId> allUnitNodeIds = getNodeIds(allUnitEps);
+        List<PdsEquipproperty> allEps = getAllEps();
+        List<NodeId> allUnitNodeIds = getNodeIds(allEps);
 
 //        List<PdsEquipproperty> allSiloEps = getEps(siloMap);
 //        List<NodeId> allSiloNodeIds = getNodeIds(allSiloEps);
@@ -89,27 +90,26 @@ public class ScanOpcService {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(16);
 
-        for (Map.Entry<String, List<PdsEquipproperty>> entry : unitMap.entrySet()) {
-            List<NodeId> unitNodeIds = getNodeIds(entry.getValue());
 
-            Runnable unitTask = getRunnable(opcUaClient, opcSubject, unitNodeIds, entry.getKey(), entry.getValue());
-            scheduler.scheduleAtFixedRate(unitTask, 0, 1, TimeUnit.SECONDS);;
-        }
+        List<NodeId> tagNodeIds = getNodeIds(allEps);
+
+        Runnable unitTask = getRunnable(opcUaClient, opcSubject, tagNodeIds, allEps);
+        scheduler.scheduleAtFixedRate(unitTask, 0, 1, TimeUnit.SECONDS);;
+
     }
 
     private static Runnable getRunnable(UaClient opcUaClient,
                                         OpcValueSubject opcSubject,
-                                        List<NodeId> unitNodeIds,
-                                        String unitId,
+                                        List<NodeId> allNodeIds,
                                         List<PdsEquipproperty> eps) {
         Runnable scanOnce = () -> {
             try {
-                if (unitNodeIds.isEmpty()) {
+                if (allNodeIds.isEmpty()) {
                     return;
                 }
                 List<DataValue> dataValues = opcUaClient.readValues(0,
                         TimestampsToReturn.Neither,
-                        unitNodeIds).get();
+                        allNodeIds).get();
                 List<Object> dvs = dataValues.stream()
                         .map(c -> c.getValue().getValue())
                         .collect(Collectors.toList());
@@ -131,7 +131,7 @@ public class ScanOpcService {
                             .collect(Collectors.toMap(PdsEquipproperty::getPropertyid, t -> t,
                                     (v1, v2) -> v2));
 //                System.out.println("epsValue = " + epsValue);
-                opcSubject.notify(epsValue, unitId);
+                opcSubject.notify(epsValue);
             } catch (Exception e) {
                 logger.error("scan opc error: ",e);
 //                    e.printStackTrace();
@@ -139,25 +139,6 @@ public class ScanOpcService {
         };
 
         return scanOnce;
-    }
-
-    private List<NodeId> getNodeIds(List<PdsEquipproperty> allUnitEps) {
-        List<NodeId> allUnitNodeIds = allUnitEps.stream()
-                .map(c -> {
-                    try {
-                        return NodeId.parse(c.getTagaddress());
-                    } catch (UaRuntimeException e) {
-                        System.out.println("Tag Address parse Exception: " + c.getPropertyid() +
-                                "_" + c.getTagaddress());
-//                        e.printStackTrace();
-                        return NodeId.parseOrNull(c.getTagaddress());
-                    } catch (NullPointerException e) {
-                        System.out.println("Null tag Address: " + c.getPropertyid());
-                        return null;
-                    }
-                })
-                .collect(Collectors.toList());
-        return allUnitNodeIds;
     }
 
     private List<PdsEquipproperty> getAllEps() {

@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface OpcValueListener {
     void init();
-    void update(Map<String, PdsEquipproperty> eps, String unitId);
+    void update(Map<String, PdsEquipproperty> eps);
 }

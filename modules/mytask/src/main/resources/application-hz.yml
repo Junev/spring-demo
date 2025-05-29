@@ -35,3 +35,8 @@ logging:
     org.springframework.jdbc.core.JdbcTemplate: INFO
 ksecapi:
   url: http://192.168.40.20:81
+feature:
+  scanOpc:
+    enabled: true
+  scheduledPostRequest:
+    enabled: true

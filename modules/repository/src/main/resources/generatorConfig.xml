@@ -50,7 +50,9 @@
         <!--<table tableName="PRD_BATCH"/>-->
         <!--<table tableName="PRD_UNITCMD"/>-->
         <!--<table tableName="SILOINFO"/>-->
-        <table tableName="EMS_RUN_TIME_STATS"/>
+        <table tableName="APP_CONFIG_ITEMS" />
+        <table tableName="EMS_RUN_TIME_STATS" />
+        <table tableName="EMS_PREHEAT_RUN_TIME" />
         <!--<table tableName="PRD_UNITCMD_PARAS"/>-->
         <!--<table tableName="V_PRD_CELLTASKSTOPRECORD"/>-->
     </context>

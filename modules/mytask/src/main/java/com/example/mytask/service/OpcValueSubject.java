@@ -25,9 +25,9 @@ public class OpcValueSubject {
         }
     }
 
-    void notify(Map<String, PdsEquipproperty> eps, String unitId) {
+    void notify(Map<String, PdsEquipproperty> eps) {
         listeners.forEach(c -> {
-            c.update(eps, unitId);
+            c.update(eps);
         });
     }
 }

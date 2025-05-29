@@ -3,11 +3,13 @@ package com.example.demo.security;
 import com.example.demo.service.HrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,8 +25,8 @@ import java.util.Arrays;
  * @see <a href="https://blog.csdn.net/qq_35067322/article/details/115878528">WebSecurity</a>
  */
 
-//@Configuration
-//@EnableWebSecurity(debug = true)
+@Configuration
+@EnableWebSecurity(debug = true)
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

@@ -31,7 +31,7 @@ public class TimeByConditionListener implements OpcValueListener {
     }
 
     @Override
-    public void update(Map<String, PdsEquipproperty> eps, String unitId) {
+    public void update(Map<String, PdsEquipproperty> eps) {
         boolean isLocked = runTimeLock.tryLock();
         if (isLocked) {
             try {
@@ -42,6 +42,9 @@ public class TimeByConditionListener implements OpcValueListener {
                     System.out.println("Daily clear time count");
                     for (PdsEquipproperty p : timeEps) {
                         AtomicLong pre = (AtomicLong) p.getValue();
+                        if (pre == null) {
+                            pre = new AtomicLong(0);
+                        }
                         pre.set(0);
                         p.setValue(pre);
                     }
@@ -79,6 +82,11 @@ public class TimeByConditionListener implements OpcValueListener {
                 String mid = matcher.group(2);
                 String right = matcher.group(3);
 
+                Object eps1 = eps.get(left);
+                if (eps1 == null) {
+                    System.out.println("condition = " + condition + ", eps = " + eps);
+                    return false;
+                }
                 Object lv = eps.get(left).getValue();
 //                System.out.println(left + " ," + eps.get(left)
 //                        .getTagaddress() + " ," + lv.getClass().getName() + " ," + lv);

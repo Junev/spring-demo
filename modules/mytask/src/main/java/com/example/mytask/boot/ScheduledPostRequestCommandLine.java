@@ -67,7 +67,8 @@ public class ScheduledPostRequestCommandLine implements CommandLineRunner {
 
                 ZoneId zoneId = TimeZone.getDefault().toZoneId();
                 LocalDateTime now = LocalDateTime.now();
-                LocalDateTime lastHour = now.plusHours(-2400L);
+                // 获取一小时内结束的单元指令
+                LocalDateTime lastHour = now.plusHours(-1L);
                 System.out.println("------------------------------------处理缺失数据-------------------------------");
                 Instant endInstant = now.atZone(zoneId).toInstant();
                 Instant startInstant = lastHour.atZone(zoneId).toInstant();
@@ -75,30 +76,39 @@ public class ScheduledPostRequestCommandLine implements CommandLineRunner {
                 java.util.Date startDate = Date.from(startInstant);
                 PrdUnitcmdExample ex = new PrdUnitcmdExample();
                 ex.createCriteria()
-                        .andExestarttimeGreaterThan(startDate)
-                        .andExestarttimeLessThan(endDate);
-                List<PrdUnitcmd> cmds = unitcmdMapper.selectByExample(ex);
-//                cmds.forEach(c -> {
-//                    Integer prodDocRes = prodDoc(sid, c.getTaskid());
-//
-//                });
-//                System.out.println(LocalDateTime.now().toString() + " 重算产耗完成");
+                        .andExeendtimeBetween(startDate, endDate);
+                List<PrdUnitcmd> prodcmds = unitcmdMapper.selectByExample(ex);
+                prodcmds.forEach(c -> {
+                    Integer prodDocRes = prodDoc(sid, c.getTaskid());
+                });
+                System.out.println(LocalDateTime.now().toString() + " 重算产耗完成");
 
 //                cmds.stream().filter(c -> c.getSchedstatus() == 1).forEach(k -> {
 //                    Integer quaRes = quaRestatistic(sid, k.getCmdid());
 //                });
 //                System.out.println(LocalDateTime.now().toString() + " 重算质量数据完成");
 
-                List<String> taskIds = cmds.stream()
+                // 获取10天内开始的工单
+                LocalDateTime tendaysAgo = now.plusDays(-10L);
+                Instant endInstant2 = now.atZone(zoneId).toInstant();
+                Instant startInstant2 = tendaysAgo.atZone(zoneId).toInstant();
+                java.util.Date endDate2 = Date.from(endInstant2);
+                java.util.Date startDate2 = Date.from(startInstant2);
+                PrdUnitcmdExample ex2 = new PrdUnitcmdExample();
+                ex2.createCriteria()
+                        .andExestarttimeBetween(startDate2, endDate2);
+                List<PrdUnitcmd> silocmds = unitcmdMapper.selectByExample(ex2);
+                List<String> taskIds = silocmds.stream()
                         .map(PrdUnitcmd::getTaskid)
                         .collect(Collectors.toList());
                 siloStoreTime(sid, taskIds);
                 System.out.println(LocalDateTime.now().toString() + " 贮柜存料时间计算完成");
 
+                // 获取上周开始的批次号
                 PrdBatchExample eb = new PrdBatchExample();
-                LocalDateTime lastMonth = now.plusDays(-2400L);
+                LocalDateTime lastWeek = now.plusDays(-7L);
                 eb.createCriteria()
-                        .andExestarttimeGreaterThan(Date.from(lastMonth.atZone(zoneId)
+                        .andExestarttimeGreaterThan(Date.from(lastWeek.atZone(zoneId)
                                 .toInstant()));
                 List<PrdBatch> batches = batchMapper.selectByExample(eb);
                 batches.forEach(c -> {

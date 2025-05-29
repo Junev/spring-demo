@@ -32,11 +32,11 @@ mqtt:
   username: emqtest1
   password: passwd~!@eClient.10#$%^&*()_+
 opcua:
-  url: opc.tcp://172.16.96.106:49321
+  url: opc.tcp://172.16.202.149:49321
   username: ksec.opcua
   password: q1w2e3r4t5
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: INFO
 ksecapi:
-  url: http://172.16.96.122:81
+  url: http://127.0.0.1:80

@@ -35,7 +35,7 @@ public class CaculateAbstractListener implements OpcValueListener {
     }
 
     @Override
-    public void update(Map<String, PdsEquipproperty> eps, String unitId) {
+    public void update(Map<String, PdsEquipproperty> eps) {
         String key1 = "u900201pt0201";
         PdsEquipproperty key1ep = eps.get(key1);
         
