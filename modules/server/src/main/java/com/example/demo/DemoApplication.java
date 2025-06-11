@@ -28,13 +28,18 @@ public class DemoApplication {
     private static final Logger logger
             = LoggerFactory.getLogger(DemoApplication.class);
 
-    public static void main(String[] args) throws UnknownHostException {
+    public static void main(String[] args) {
 //        SpringApplication.run(DemoApplication.class, args);
         SpringApplicationBuilder builder = new SpringApplicationBuilder(DemoApplication.class);
         ConfigurableApplicationContext application = builder.bannerMode(Banner.Mode.OFF).run(args);
 
         Environment env = application.getEnvironment();
-        String ip = InetAddress.getLocalHost().getHostAddress();
+        String ip = null;
+        try {
+            ip = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
         String port = env.getProperty("server.port");
         String contextPath = env.getProperty("server.servlet.context-path");
         String path = contextPath != null ? contextPath : "";
