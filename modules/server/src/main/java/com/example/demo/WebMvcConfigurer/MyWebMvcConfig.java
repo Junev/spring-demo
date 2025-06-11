@@ -1,6 +1,6 @@
 package com.example.demo.WebMvcConfigurer;
 
-import com.example.demo.interceptor.MyIntercepter1;
+import com.example.demo.interceptor.MyInterceptor1;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -17,7 +17,7 @@ public class MyWebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MyIntercepter1())
+        registry.addInterceptor(new MyInterceptor1())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/hello");
     }
