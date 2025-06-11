@@ -6,6 +6,12 @@ server:
 #    key-store-type: JKS
 #    key-alias: tomact
 #    enabled: true
+  error:
+    whitelabel:
+      enabled: false
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

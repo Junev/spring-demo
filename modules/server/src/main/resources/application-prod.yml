@@ -6,6 +6,12 @@ server:
     key-store-type: JKS
     key-alias: tomact
     enabled: true
+  error:
+    whitelabel:
+      enabled: false
+    include-message: always
+    include-binding-errors: never
+    include-stacktrace: never
   servlet:
     context-path: /chapter3
   tomcat:
