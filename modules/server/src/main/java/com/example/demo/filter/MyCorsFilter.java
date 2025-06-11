@@ -27,17 +27,14 @@ public class MyCorsFilter implements Filter {
         System.out.println("MyCorsFilter>>>doFilter");
 
         HttpServletResponse res = (HttpServletResponse) servletResponse;
-        res.addHeader("Access-Control-Allow-Origin", "http://192.168.40.20:1888");
-        res.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        res.addHeader("Access-Control-Allow-Origin", "*");
+        res.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.addHeader("Access-Control-Allow-Credentials", "true");
-        res.addHeader("Access-Control-Allow-Headers", "Authorization, Cache-Control, Content" +
-                "-Type");
+        res.addHeader("Access-Control-Allow-Headers", "Authorization, Cache-Control, Content-Type, X-Requested-With");
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-//        System.out.println(req.getMethod());
         if (req.getMethod().equals("OPTIONS")) {
-
-            servletResponse.getWriter().println("ok");
+            res.setStatus(HttpServletResponse.SC_OK);
             return;
         }
         filterChain.doFilter(servletRequest, servletResponse);

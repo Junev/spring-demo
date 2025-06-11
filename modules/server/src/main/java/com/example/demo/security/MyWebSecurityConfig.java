@@ -1,10 +1,12 @@
 package com.example.demo.security;
 
 import com.example.demo.service.HrService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +21,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @see <a href="https://blog.csdn.net/weixin_40379712/article/details/130056716">废弃的</a>
@@ -56,7 +60,6 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "personnel")
                 .and()
                 .withUser("bruce").password(passwordEncoder().encode("123")).roles("personnel");
-//        auth.userDetailsService(hrService);
     }
 
     @Override
@@ -67,22 +70,43 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .csrf()
-//                  .disable()
+                .csrf()
+                .disable()
+                .cors()
+                .and()
                 .authorizeRequests()
-                    .antMatchers("/static/**", "/oauth/**", "/login/**", "/logout/**")
+                    .antMatchers("/static/**", "/oauth/**", "/login", "/logout/**")
                         .permitAll()
-                    .antMatchers("/admin/**")
-                        .hasRole("admin")
-                        .antMatchers("/user/**", "/api", "/mdb", "/hr/**", "/book/**", "/book", "/upload")
-                        .access("hasAnyRole('admin', 'personnel')")
-                        .anyRequest()
-                        .authenticated()
-
+                    .anyRequest()
+                        .hasAnyRole("admin", "personnel")
                 .and()
                     .formLogin()
                     .loginProcessingUrl("/login")
-                    .permitAll();
+                    .successHandler((request, response, authentication) -> {
+                        response.setContentType("application/json;charset=UTF-8");
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("code", HttpStatus.OK.value());
+                        result.put("message", "登录成功");
+                        response.getWriter().write(new ObjectMapper().writeValueAsString(result));
+                    })
+                    .failureHandler((request, response, exception) -> {
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("code", HttpStatus.UNAUTHORIZED.value());
+                        result.put("message", "用户名或密码错误");
+                        response.getWriter().write(new ObjectMapper().writeValueAsString(result));
+                    })
+                    .permitAll()
+                .and()
+                    .logout()
+                    .logoutSuccessHandler((request, response, authentication) -> {
+                        response.setContentType("application/json;charset=UTF-8");
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("code", HttpStatus.OK.value());
+                        result.put("message", "退出成功");
+                        response.getWriter().write(new ObjectMapper().writeValueAsString(result));
+                    });
     }
 
 

@@ -130,11 +130,13 @@
                 });
             },
             login() {
-                // fetch('http://fe.bruce.org:9090/login',{method:'POST'})
                 var xhr = new XMLHttpRequest()
                 xhr.open('POST', 'http://127.0.0.1:9090/login', true)
                 xhr.setRequestHeader('Content-Type', 'application/json')
-                xhr.send();
+                xhr.send(JSON.stringify({
+                    username: 'root',
+                    password: '123'
+                }));
             }
         },
     };
