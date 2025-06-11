@@ -22,7 +22,7 @@ public class RedisStandaloneConfig {
     private int database;
     private @Nullable
     String username = null;
-    private RedisPassword password = RedisPassword.none();
+    private String password;
 
     @Bean
     RedisStandaloneConfiguration redisStandaloneConfiguration() {
@@ -32,7 +32,7 @@ public class RedisStandaloneConfig {
         config.setPort(this.port);
         config.setDatabase(this.database);
         config.setUsername(this.username);
-        config.setPassword(this.password);
+        config.setPassword(RedisPassword.of(this.password));
         return config;
     }
 
@@ -42,7 +42,7 @@ public class RedisStandaloneConfig {
                 .withHost(this.host)
                 .withPort(this.port)
                 .withDatabase(this.database)
-                .withAuthentication(this.username, this.password.toString())
+                .withAuthentication(this.username, this.password)
                 .build();
     }
 

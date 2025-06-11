@@ -41,9 +41,6 @@ public class BookController {
     @Autowired
     private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
-    /**
-     * MappingJacksonToHttpMessageConverter
-     */
     @GetMapping("")
     public Book book() {
         StatefulRedisConnection<String, String> connect = redisClient.connect();
@@ -56,6 +53,7 @@ public class BookController {
         redisFutures.add(set1);
         LettuceFutures.awaitAll(1, TimeUnit.MINUTES,
                 redisFutures.toArray(new RedisFuture[0]));
+        connect.closeAsync();
 
 
         Book newBook = new Book();
