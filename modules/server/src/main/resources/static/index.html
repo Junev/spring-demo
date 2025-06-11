@@ -2,19 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="container mt-5">
+        <h1>欢迎来到系统</h1>
+        <p>您已成功登录系统。</p>
+        <a href="/logout" class="btn btn-danger">退出登录</a>
+    </div>
     <div id="app"></div>
-    <script>
-        if (!sessionStorage.getItem('token')) {
-            const app = document.querySelector("#app");
-            app.innerHTML = 'Redirecting to login page...'
-            setTimeout(() => {
-                location.href = '/oauth/authorize?response_type=code&state=&client_id=code&scope=all\n' +
-                '&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2Fcallback';
-            }, 1000)
-        }
-    </script>
+<!--    <script>-->
+<!--        if (!sessionStorage.getItem('token')) {-->
+<!--            const app = document.querySelector("#app");-->
+<!--            app.innerHTML = 'Redirecting to login page...'-->
+<!--            setTimeout(() => {-->
+<!--                location.href = '/oauth/authorize?response_type=code&state=&client_id=code&scope=all\n' +-->
+<!--                '&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2Fcallback';-->
+<!--            }, 1000)-->
+<!--        }-->
+<!--    </script>-->
 </body>
 </html>

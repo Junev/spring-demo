@@ -64,7 +64,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/static/**");
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/static/**", "/css/**", "/js/**");
     }
 
     @Override
@@ -73,15 +73,18 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .cors()
+                .configurationSource(getCorsConfigurationSource())
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/static/**", "/oauth/**", "/login", "/logout/**")
+                    .antMatchers("/", "/index.html", "/static/**", "/css/**", "/js/**", "/login.html")
                         .permitAll()
                     .anyRequest()
                         .hasAnyRole("admin", "personnel")
                 .and()
                     .formLogin()
+                    .loginPage("/login.html")
                     .loginProcessingUrl("/login")
+                    .defaultSuccessUrl("/index.html", true)
                     .successHandler((request, response, authentication) -> {
                         response.setContentType("application/json;charset=UTF-8");
                         Map<String, Object> result = new HashMap<>();
