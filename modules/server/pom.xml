@@ -48,12 +48,14 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!--  https://docs.spring.io/spring-security/reference/5.8/servlet/getting-started.html-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>2.7.5</version>
         </dependency>
-<!--        项目已废弃，由 spring-security 提供最新的 OAuth 2.0支持-->
+        <!-- 项目已废弃 (https://github.com/spring-attic/spring-security-oauth)，-->
+        <!-- 转由 spring-security (https://spring.io/projects/spring-authorization-server) 提供最新的 OAuth 2.0支持-->
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>

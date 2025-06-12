@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 
 @SpringBootApplication
 @ServletComponentScan
-@MapperScan("com.example.demo.mapper")
+@MapperScan("com.example.demo.core.infrastructure.mapper")
 @MapperScan("com.example.repository.mapper")
 @EnableCaching
 public class DemoApplication {

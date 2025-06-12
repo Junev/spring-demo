@@ -18,7 +18,6 @@
         <module>modules/guide</module>
         <module>modules/mybatis-mining</module>
         <module>modules/mytask</module>
-        <module>modules/oauth-server</module>
         <module>modules/repository</module>
         <module>modules/server</module>
     </modules>

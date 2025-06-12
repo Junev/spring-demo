@@ -1,5 +1,0 @@
-<configuration>
-    <settings>
-        <setting name="logImpl" value="SLF4j"/>
-    </settings>
-</configuration>
