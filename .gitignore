@@ -3,6 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/modules/server/src/main/resources/static/element/elementUIV2.14.0/
 
 ### STS ###
 .apt_generated
@@ -34,3 +35,4 @@ LogFile.*
 
 ### VS Code ###
 .vscode/
+
