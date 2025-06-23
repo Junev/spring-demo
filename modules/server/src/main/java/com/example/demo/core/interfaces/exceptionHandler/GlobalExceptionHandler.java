@@ -34,7 +34,6 @@ public class GlobalExceptionHandler {
         
         Result<String> result = Result.error("服务器内部错误");
         result.setPath(request.getRequestURI());
-        result.setData(stackTrace);
         
         return result;
     }
@@ -54,10 +53,9 @@ public class GlobalExceptionHandler {
             e.getMessage(), 
             stackTrace);
         
-        Result<String> result = Result.error(e.getMessage());
+        Result<String> result = Result.error("运行时错误：" + e.getClass().getSimpleName());
         result.setPath(request.getRequestURI());
-        result.setData(stackTrace);
-        
+
         return result;
     }
 } 

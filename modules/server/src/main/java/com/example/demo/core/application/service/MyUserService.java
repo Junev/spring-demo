@@ -18,7 +18,7 @@ import java.util.List;
 
 @Service
 @CacheConfig(cacheNames = "hr_cache")
-public class HrService implements UserDetailsService {
+public class MyUserService implements UserDetailsService {
     @Autowired
     HrOMapper hrMapper;
 

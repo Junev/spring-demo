@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/api/book")
 public class BookController {
     @Autowired
     Book book;
