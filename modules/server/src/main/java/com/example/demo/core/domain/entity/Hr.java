@@ -1,5 +1,6 @@
 package com.example.demo.core.domain.entity;
 
+import com.example.demo.core.domain.enums.EnabledStatus;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ public class Hr implements Serializable{
 
     private String address;
 
-    private Integer enabled;
+    private EnabledStatus enabled;
 
     private String username;
 
