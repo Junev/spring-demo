@@ -1,6 +1,6 @@
 package com.example.demo.core.interfaces.security;
 
-import com.example.demo.core.application.service.HrService;
+import com.example.demo.core.application.service.MyUserService;
 import com.example.demo.core.interfaces.common.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ import java.util.Arrays;
  * 用于配置Web应用的安全策略，包括认证、授权、CORS等
  */
 @Configuration
-@EnableWebSecurity(debug = true)  // 启用Spring Security，debug模式关闭
+@EnableWebSecurity(debug = false)  // 启用Spring Security，debug模式关闭
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    HrService hrService;
+    MyUserService myUserService;
 
     /**
      * 配置密码编码器
@@ -98,6 +98,10 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     // 允许所有人访问的路径
                     .antMatchers("/", "/index.html", "/static/**", "/css/**", "/js/**", "/login.html")
+                        .permitAll()
+                    .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v2/**", "/v2/api-docs", "/v3/**", "/v3/api-docs", "/swagger-resources/**")
+                        .permitAll()
+                    .antMatchers("/oauth/**")
                         .permitAll()
                     // 对/api/**路径，通过OAuth2认证
                     .antMatchers("/api/**")
