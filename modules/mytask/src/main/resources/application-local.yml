@@ -27,6 +27,7 @@ feature:
   scheduledPostRequest:
     enabled: false
 mqtt:
+  enabled: false
   broker: tcp://192.168.40.20:1883
   clientId: mqttx_e4b1da48
   username: emqtest1

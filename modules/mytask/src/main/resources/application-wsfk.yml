@@ -8,7 +8,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://172.16.96.117:1433;database=HZZS_DB;Encrypt=False;
+    url: jdbc:sqlserver://10.140.101.135:1433;database=WSFKDB;Encrypt=False;
     username: sa
     password: q1w2e3r4t5...
   transaction:
@@ -25,7 +25,7 @@ feature:
   scanOpc:
     enabled: true
   scheduledPostRequest:
-    enabled: true
+    enabled: false
 mqtt:
   enabled: false
   broker: tcp://192.168.40.20:1883
@@ -33,11 +33,11 @@ mqtt:
   username: emqtest1
   password: passwd~!@eClient.10#$%^&*()_+
 opcua:
-  url: opc.tcp://172.16.96.106:49321
+  url: opc.tcp://10.140.101.134:49321
   username: ksec.opcua
-  password: q1w2e3r4t5
+  password: ksecq1w2e3r4t5...
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: INFO
 ksecapi:
-  url: http://172.16.96.122:81
+  url: http://127.0.0.1:80

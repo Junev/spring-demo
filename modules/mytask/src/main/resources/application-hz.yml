@@ -21,7 +21,13 @@ spring:
       enabled: true
 mybatis:
   mapper-locations: classpath*:xml/*Mapper.xml
+feature:
+  scanOpc:
+    enabled: true
+  scheduledPostRequest:
+    enabled: true
 mqtt:
+  enabled: false
   broker: tcp://192.168.40.20:1883
   clientId: mqttx_e4b1da48
   username: emqtest1
@@ -35,8 +41,3 @@ logging:
     org.springframework.jdbc.core.JdbcTemplate: INFO
 ksecapi:
   url: http://192.168.40.20:81
-feature:
-  scanOpc:
-    enabled: true
-  scheduledPostRequest:
-    enabled: true
