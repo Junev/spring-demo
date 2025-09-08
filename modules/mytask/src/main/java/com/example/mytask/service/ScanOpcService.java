@@ -18,6 +18,7 @@ import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +61,9 @@ public class ScanOpcService {
     @Autowired
     private CaculateAbstractListener listener3;
 
+    @Value("${opcua.read.chunk.size:5000}")
+    private int chunkSize;
+
     // 分段初始化
     HashMap<String, List<PdsEquipproperty>> unitMap = new HashMap<>();
     HashMap<String, List<PdsEquipproperty>> siloMap = new HashMap<>();
@@ -93,7 +97,7 @@ public class ScanOpcService {
 
         List<NodeId> tagNodeIds = getNodeIds(allEps);
 
-        Runnable unitTask = getRunnable(opcUaClient, opcSubject, tagNodeIds, allEps);
+        Runnable unitTask = getRunnable(opcUaClient, opcSubject, tagNodeIds, allEps, chunkSize);
         scheduler.scheduleAtFixedRate(unitTask, 0, 1, TimeUnit.SECONDS);;
 
     }
@@ -101,15 +105,31 @@ public class ScanOpcService {
     private static Runnable getRunnable(UaClient opcUaClient,
                                         OpcValueSubject opcSubject,
                                         List<NodeId> allNodeIds,
-                                        List<PdsEquipproperty> eps) {
+                                        List<PdsEquipproperty> eps,
+                                        int chunkSize) {
         Runnable scanOnce = () -> {
             try {
                 if (allNodeIds.isEmpty()) {
                     return;
                 }
-                List<DataValue> dataValues = opcUaClient.readValues(0,
-                        TimestampsToReturn.Neither,
-                        allNodeIds).get();
+                
+                // Read all values in chunks but maintain data consistency by collecting at the same timestamp
+                List<DataValue> dataValues = new ArrayList<>();
+                
+             // Calculate number of chunks needed
+                int totalChunks = (int) Math.ceil((double) allNodeIds.size() / chunkSize);
+                
+                // Read all chunks
+                for (int i = 0; i < totalChunks; i++) {
+                    int start = i * chunkSize;
+                    int end = Math.min(start + chunkSize, allNodeIds.size());
+                    List<NodeId> chunkNodeIds = allNodeIds.subList(start, end);
+                    List<DataValue> chunkDataValues = opcUaClient.readValues(0,
+                            TimestampsToReturn.Neither,
+                            chunkNodeIds).get();
+                    dataValues.addAll(chunkDataValues);
+                }
+                
                 List<Object> dvs = dataValues.stream()
                         .map(c -> c.getValue().getValue())
                         .collect(Collectors.toList());
@@ -125,12 +145,12 @@ public class ScanOpcService {
 //                                p.setEquipmentid(op.getEquipmentid());
                                 p.setPropertyid(op.getPropertyid());
 //                                p.setTagaddress(op.getTagaddress());
-                                p.setValue(dataValues.get(c).getValue().getValue());
+                                p.setValue(dataValues.get(c).getValue().getValue());   
                                 return p;
                             })
                             .collect(Collectors.toMap(PdsEquipproperty::getPropertyid, t -> t,
                                     (v1, v2) -> v2));
-//                System.out.println("epsValue = " + epsValue);
+               System.out.println("epsValue = " + epsValue);
                 opcSubject.notify(epsValue);
             } catch (Exception e) {
                 logger.error("scan opc error: ",e);
