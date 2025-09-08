@@ -21,6 +21,5 @@ public class MyTaskApplication {
 
     public static void main(String[] args) {
         context = SpringApplication.run(MyTaskApplication.class, args);
-//        SiloMqttBoot.run();
     }
 }
